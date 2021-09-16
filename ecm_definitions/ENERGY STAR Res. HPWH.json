@@ -6,7 +6,7 @@
   "end_use": "water heating",
   "fuel_type": "electricity",
   "technology": "electric WH",
-  "market_entry_year": 2023,
+  "market_entry_year": 2021,
   "market_entry_year_source": {
     "notes": "Assume historical measure penetration is captured in baseline",
     "source_data": null},

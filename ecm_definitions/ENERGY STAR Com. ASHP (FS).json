@@ -1,6 +1,8 @@
 {
   "name": "ENERGY STAR Com. ASHP (FS)",
-  "climate_zone": "all",
+  "climate_zone": ["TRE", "FRCC", "MISC", "MISS", "PJMD", "SRCA",
+                   "SRSE", "SRCE", "SPPS", "SPPC", "SRSG", "CANO",
+                   "CASO"],
   "bldg_type": "all commercial",
   "structure_type": "all",
   "end_use": ["cooling", "heating"],
@@ -33,7 +35,7 @@
       "pages": null,
       "URL": "http://www.powerknot.com/how-efficient-is-your-air-conditioning-system.html"
     }]},
-  "installed_cost": 92.1,
+  "installed_cost": 86.11,
   "cost_units": "2017$/kBtu/h cooling",
   "installed_cost_source": {
     "notes": "Median ENERGY STAR installed cost in 2017 divided by typical capacity (90 kBtu/h cooling)",
@@ -62,7 +64,7 @@
   "measure_type": "full service",
   "fuel_switch_to": "electricity",
   "market_scaling_fractions": {
-    "cooling": 0.66,
+    "cooling": 0.68,
     "heating": 0.73
   },
   "market_scaling_fractions_source": {
@@ -73,7 +75,7 @@
       "URL": "https://www.eia.gov/consumption/commercial/data/2012/bc/pdf/b30.pdf",
       "fraction_derivation": "Heating fraction excludes electric heating and non-electric heating in floorspace where cooling is served by a chiller or district chilled water (21,649 sf out of 79294 sf cooled), under the assumption that this service is not replacable by the targeted heat pump; cooling fraction excludes cooling in buildings that use electric source of primary heating (25,613 sf/ 79,294 sf)."
   },
-  "_description": "Typical size light commercial rooftop HP unit that meets the ENERGY STAR performance standard in 2017",
+  "_description": "Typical size light commercial rooftop HP unit that meets the ENERGY STAR performance standard, non-cold-climate",
   "_notes": null,
   "_added_by": {
     "name": "Jared Langevin",

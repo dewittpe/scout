@@ -6,7 +6,7 @@
   "end_use": "water heating",
   "fuel_type": ["natural gas", "distillate", "other fuel"],
   "technology": "all",
-  "market_entry_year": 2023,
+  "market_entry_year": 2021,
   "market_entry_year_source": {
     "notes": "Assume historical measure penetration is captured in baseline",
     "source_data": null},
@@ -25,10 +25,10 @@
       "year": 2015,
       "table": 1,
       "URL": "https://www.energystar.gov/sites/default/files/ENERGY%20STAR%20Version%204.0%20Water%20Heaters%20Final%20Specification%20and%20Partner%20Commitments_0.pdf"}]},
-  "installed_cost": 1900,
-  "cost_units": "2017$/unit",
+  "installed_cost": 2075,
+  "cost_units": "2020$/unit",
   "installed_cost_source": {
-    "notes": "Median of average ENERGY STAR installed cost range in 2017",
+    "notes": "Median of typical 2020 range (2020 typical performance matches updated ESTAR spec most closely",
     "source_data": {
       "title": "Updated Buildings Sector Appliance and Equipment Costs and Efficiencies - Appendix A",
       "author": null,

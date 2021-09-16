@@ -1,12 +1,14 @@
 {
   "name": "ENERGY STAR Res. ASHP",
-  "climate_zone": "all",
+  "climate_zone": ["TRE", "FRCC", "MISC", "MISS", "PJMD", "SRCA",
+                   "SRSE", "SRCE", "SPPS", "SPPC", "SRSG", "CANO",
+                   "CASO"],
   "bldg_type": "all residential",
   "structure_type": "all",
   "end_use": ["cooling", "heating"],
   "fuel_type": "electricity",
   "technology": ["ASHP", "resistance heat", "central AC"],
-  "market_entry_year": 2023,
+  "market_entry_year": 2021,
   "market_entry_year_source": {
     "notes": "Assume historical measure penetration is captured in baseline",
     "source_data": null
@@ -39,20 +41,27 @@
       }
     ]
   },
-  "installed_cost": {
-      "cooling": 4950,
-      "heating": 0},
+  "installed_cost": 6100,
   "cost_units": "2017$/unit",
   "installed_cost_source": {
-    "notes": "Total ENERGY STAR installed cost in 2017",
-    "source_data": {
+    "notes": "Installed costs for best ASHP in 2017",
+    "source_data": [
+      {
       "title": "Updated Buildings Sector Appliance and Equipment Costs and Efficiencies",
       "author": null,
       "organization": "U.S. Energy Information Administration",
       "year": 2018,
       "pages": 29,
-      "URL": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/full.pdf"}
-  },
+      "URL": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/full.pdf"
+      },
+      {
+      "title": "Grid-Interactive Efficient Building Technology Cost, Performance, and Lifetime Characteristics",
+      "author": "Nubbe et al. 2020",
+      "organization": "Guidehouse Inc.",
+      "year": 2020,
+      "pages": 17,
+      "URL": "https://eta-publications.lbl.gov/sites/default/files/geb_technologies_data_report_final_v5_clean_ag_0.pdf"}
+    ]},
   "product_lifetime": 15.5,
   "product_lifetime_units": "years",
   "product_lifetime_source": {
@@ -67,9 +76,23 @@
   },
   "measure_type": "full service",
   "fuel_switch_to": null,
-  "market_scaling_fractions": null,
-  "market_scaling_fractions_source": null,
-  "_description": "Standard size residential air source heat pump that meets the ENERGY STAR performance standard in 2017",
+  "market_scaling_fractions": {
+    "ASHP": 1,
+    "central AC": 0.405,
+    "resistance heat": 1},
+  "market_scaling_fractions_source": {
+    "ASHP": "Applies to all homes with ASHPs",
+    "central AC": {
+      "title": "RECS 2015 - Table HC6.1",
+      "author": null,
+      "organization": "U.S. Energy Information Administration",
+      "year": 2015,
+      "URL": "https://www.eia.gov/consumption/residential/data/2015",
+      "fraction_derivation": "Central AC multiple of 40.5% was determined as the proportion of total homes with a ducted cooling system where heating is done using any electric heating energy source. Total homes with ducted cooling in the sample is 76,090,522, and then filtered for homes with electric heating system (76,090,522 - 45,241,958 fuel-fired systems)."
+    },
+    "resistance heat": "Applies to all homes with electric resistance furnaces (the resistance heat tech. is indicative of a forced air electric furnace in the EIA data)"
+  },
+  "_description": "Standard size residential air source heat pump that meets the ENERGY STAR performance standard, non-cold-climate",
   "_notes": null,
   "_added_by": {
     "name": "Jared Langevin",

@@ -1,11 +1,14 @@
 {
   "name": "ENERGY STAR Com. ASHP",
-  "climate_zone": "all",
+  "climate_zone": ["TRE", "FRCC", "MISC", "MISS", "PJMD", "SRCA",
+                   "SRSE", "SRCE", "SPPS", "SPPC", "SRSG", "CANO",
+                   "CASO"],
   "bldg_type": "all commercial",
   "structure_type": "all",
   "end_use": ["cooling", "heating"],
   "fuel_type": "electricity",
-  "technology": ["rooftop_AC", "rooftop_ASHP-cool", "rooftop_ASHP-heat", "elec_boiler"],
+  "technology": ["rooftop_AC", "res_type_central_AC",
+                 "rooftop_ASHP-cool", "rooftop_ASHP-heat", "elec_boiler"],
   "market_entry_year": 2021,
   "market_entry_year_source": {
     "notes": "Assume historical measure penetration is captured in baseline",
@@ -32,7 +35,7 @@
       "pages": null,
       "URL": "http://www.powerknot.com/how-efficient-is-your-air-conditioning-system.html"
     }]},
-  "installed_cost": 92.1,
+  "installed_cost": 86.11,
   "cost_units": "2017$/kBtu/h cooling",
   "installed_cost_source": {
     "notes": "Median ENERGY STAR installed cost in 2017 divided by typical capacity (90 kBtu/h cooling)",
@@ -60,9 +63,23 @@
   },
   "measure_type": "full service",
   "fuel_switch_to": null,
-  "market_scaling_fractions": null,
-  "market_scaling_fractions_source": "NA",
-  "_description": "Typical size light commercial rooftop HP unit that meets the ENERGY STAR performance standard in 2017; exclude chillers on the cooling side and electric boilers on the heating side, which are assumed to be installed with a chiller configuration",
+  "market_scaling_fractions": {
+    "rooftop_AC": 0.32, 
+    "res_type_central_AC": 0.32,
+    "wall-window_room_AC": 0.32,
+    "rooftop_ASHP-cool": 1,
+    "rooftop_ASHP-heat": 1,
+    "elec_boiler": 1
+  },
+  "market_scaling_fractions_source": {
+      "title": "CBECS 2012 - Table B30 -  Cooling energy sources, number of buildings and floorspace",
+      "author": null,
+      "organization": "U.S. Energy Information Administration",
+      "year": 2015,
+      "URL": "https://www.eia.gov/consumption/commercial/data/2012/bc/pdf/b30.pdf",
+      "fraction_derivation": "Cooling fraction excludes cooling in buildings that use non-electric source of primary heating (25,613 sf/ 79,294 sf); cooling via HPs is associated with electric heating, thus the fraction for HP cooling is 1."
+  },
+  "_description": "Typical size light commercial rooftop HP unit that meets the ENERGY STAR performance standard, non-cold-climate",
   "_notes": null,
   "_added_by": {
     "name": "Jared Langevin",
