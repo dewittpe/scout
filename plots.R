@@ -48,13 +48,16 @@ compete_results_ecms<-fromJSON(file = file.path(base_dir, 'results','ecm_results
 compete_results_agg<-fromJSON(file = file.path(base_dir, 'results','agg_results.json'))
 # Combine aggregate and individual-level ECM results
 compete_results<-c(compete_results_agg, compete_results_ecms)
+# Read in global metadata file
+glob_dat<-fromJSON(file = file.path(base_dir, 'glob_run_vars.json'))
 
 # ============================================================================
 # Set high-level variables needed across multiple plot types
 # ============================================================================
 
+
 # Set ECM adoption scenarios
-adopt_scenarios <- c('Max adoption potential')
+adopt_scenarios <- glob_dat$'adopt_schemes'
 # Set ECM competition scenarios
 comp_schemes <- c('uncompeted', 'competed')
 # Set full list of ECM names from results file
