@@ -17,6 +17,27 @@ from argparse import ArgumentParser
 from ast import literal_eval
 from datetime import datetime
 
+################################################################################
+# Define a decorator for profiling functions
+import cProfile, pstats, io
+
+def profile(fnc):
+    """A decorator that uses cProfile to profile a function"""
+    def inner(*args, **kwargs):
+        pr = cProfile.Profile()
+        pr.enable()
+        retval = fnc(*args, **kwargs)
+        pr.disable()
+        s = io.StringIO()
+        sortby = 'cumulative'
+        ps = pstats.Stats(pr, stream = s).sort_stats(sortby)
+        ps.print_stats()
+        print(s.getvalue())
+        return retval
+    return inner
+
+################################################################################
+
 
 class MyEncoder(json.JSONEncoder):
     """Convert numpy arrays to list for JSON serializing."""
@@ -10524,6 +10545,7 @@ def tsv_cost_carb_yrmap(tsv_data, aeo_years):
     return tsv_yr_map
 
 
+@profile
 def main(base_dir):
     """Import and prepare measure attributes for analysis engine.
 
