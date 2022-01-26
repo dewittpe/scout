@@ -40,42 +40,6 @@ if (length(needed_pkgs) > 0L) {
 rm(needed_pkgs)
 
 ################################################################################
-###                             Helper Functions                             ###
-to_data_table <- function(x, depth, col_names, ...) {
-  depth <- as.integer(depth)
-  stopifnot(depth > 1)
-
-  e <- list()
-  e[[1]] <- quote(lapply)
-  e[[2]] <- x
-  for (i in 3:(3 + depth - 1)) {
-    e[[i]] <- quote(lapply)
-  }
-  e <- c(e, quote(data.table::as.data.table))
-  print(depth)
-  rtn <- eval(as.call(e))
-  depth <- depth - 1L
-
-  while(depth > 1) {
-    print("in while loop")
-    print(depth)
-    e <- list()
-    e[[1]] <- quote(lapply)
-    e[[2]] <- rtn
-    for (i in 3:(3 + depth - 1)) {
-      e[[i]] <- quote(lapply)
-    }
-    e <- c(e, quote(data.table::rbindlist))
-    e <- c(e, substitute(idcol = d, list(d = paste0("lvl", depth))))
-    rtn <- eval(as.call(e))
-    depth <- depth - 1L
-  }
-  rtn <- data.table::rbindlist(rtn, idcol = "lvl1")
-  data.table::melt(rtn, measure.vars = as.character(2022:2050),
-                   variable.name = "year", variable.factor = FALSE)
-}
-
-################################################################################
 ###                               JSON Imports                               ###
 ################################################################################
 
@@ -122,9 +86,6 @@ ecm_prep_market_mseg_out_break <- lapply(ecm_prep_market, lapply, getElement, "m
 # str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["energy"]]$savings[[1]][[4]][[1]], max.level = 1)
 # str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["carbon"]]$savings, max.level = 1)
 # str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["cost"]]$savings, max.level = 1)
-
-
-# to_data_table(ecm_prep_market_mseg_out_break, depth = 7)
 
 x <- lapply(ecm_prep_market_mseg_out_break,
             lapply, lapply, lapply, lapply, lapply, lapply,
