@@ -74,7 +74,7 @@ ecm_prep_market_mseg_out_break <- lapply(ecm_prep_market, lapply, getElement, "m
 
 # str(ecm_prep_market_master_mseg[[1]][["Technical potential"]], max.level = 1)
 # str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]], max.level = 1)
-# 
+#
 # str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["energy"]]$savings[[1]][[4]][[1]], max.level = 1)
 # str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["carbon"]]$savings, max.level = 1)
 # str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["cost"]]$savings, max.level = 1)
@@ -121,7 +121,7 @@ to_data_table(depth =31)
 # x <- lapply(x,
 #             lapply, lapply, lapply, lapply, lapply, lapply,
 #             function(x) {
-#               data.table::melt(x, measure.vars = names(x), 
+#               data.table::melt(x, measure.vars = names(x),
 #                             variable.factor = FALSE, variable.name = "year")
 #             })
 

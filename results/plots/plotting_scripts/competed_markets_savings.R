@@ -56,7 +56,7 @@ competed_markets_savings <-
 
 ################################################################################
 # storage modes, extra colums
-competed_markets_savings
+competed_markets_savings[, year := as.integer(year)]
 
 # Simplify end uses
 competed_markets_savings[, end_use2 := end_use]
