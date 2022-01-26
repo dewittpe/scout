@@ -1,14 +1,14 @@
 ################################################################################
-###                 Clean Markets and Savings (By Category)                  ###
-
 # Import competed ECM energy, carbon, and cost data
 ecm_results <-
   rjson::fromJSON(file = file.path('.', 'results','ecm_results.json'))
 
+################################################################################
 # extract the markets and savings data
 competed_markets_savings <-
   lapply(ecm_results, getElement, "Markets and Savings (by Category)")
 
+################################################################################
 # transform from json structure to a data.frame structure
 
 competed_markets_savings <-
@@ -54,8 +54,33 @@ competed_markets_savings <-
                    variable.factor = FALSE,
                    variable.name = "year")
 
+################################################################################
+# storage modes, extra colums
 competed_markets_savings
 
+# Simplify end uses
+competed_markets_savings[, end_use2 := end_use]
+
+competed_markets_savings[
+  end_use %in% c("Cooling (Equip.)", "Heating (Equip.)", "Ventilation"),
+  end_use2 := "HVAC"]
+
+competed_markets_savings[
+  end_use %in% c("Cooling (Env.)", "Heating (Env.)"),
+  end_use2 := "Envelope"]
+
+competed_markets_savings[
+  end_use %in% c("Computers and Electronics"),
+  end_use2 := "Electronics"]
+
+competed_markets_savings[
+  , end_use2 := factor(end_use2,
+                       levels = c('HVAC', 'Envelope', 'Lighting',
+                                  'Water Heating', 'Refrigeration',
+                                  'Cooking', 'Electronics', 'Other'))]
+
+################################################################################
+# save the wanted objects as .rds files
 saveRDS(competed_markets_savings,
         file = "./results/plots/competed_markets_savings.rds")
 
