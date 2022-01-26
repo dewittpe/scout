@@ -149,24 +149,63 @@ markets_savings_by_category <-
 
 markets_savings_by_category <-
   lapply(markets_savings_by_category,
-         lapply, lapply, lapply, lapply, data.table::rbindlist, idcol = "end_use")
+         lapply, lapply, lapply, lapply,
+         data.table::rbindlist, idcol = "end_use")
+
 markets_savings_by_category <-
   lapply(markets_savings_by_category,
-         lapply, lapply, lapply, data.table::rbindlist, idcol = "building_class")
+         lapply, lapply, lapply,
+         data.table::rbindlist,
+         idcol = "building_class")
+
 markets_savings_by_category <-
   lapply(markets_savings_by_category,
-         lapply, lapply, data.table::rbindlist, idcol = "region")
+         lapply, lapply,
+         data.table::rbindlist,
+         idcol = "region")
+
 markets_savings_by_category <-
   lapply(markets_savings_by_category,
-         lapply, data.table::rbindlist, idcol = "variable")
+         lapply,
+         data.table::rbindlist,
+         idcol = "variable")
+
 markets_savings_by_category <-
   lapply(markets_savings_by_category,
-         data.table::rbindlist, idcol = "adoption_scenario")
+         data.table::rbindlist,
+         idcol = "adoption_scenario")
+
 markets_savings_by_category <-
   data.table::rbindlist(markets_savings_by_category, idcol = "ecm")
 
 ################################################################################
-# save the object as a .rds object
+###                            Financial Metrics                             ###
+
+str(financial_metrics, max.level = 1)
+str(financial_metrics[[1]], max.level = 1)
+
+financial_metrics <-
+  lapply(financial_metrics, lapply, data.table::as.data.table)
+
+financial_metrics <-
+  lapply(financial_metrics, lapply,
+         function(x) {
+           data.table::melt(x,
+                            measure.vars = names(x),
+                            variable.factor = FALSE,
+                            variable.name = "year")
+         })
+
+financial_metrics <-
+  lapply(financial_metrics,
+         data.table::rbindlist,
+         idcol = "variable")
+
+financial_metrics <-
+  data.table::rbindlist(financial_metrics, idcol = "ecm")
+
+################################################################################
+# save the wanted objects as a .rds object
 saveRDS(ecm_prep, file = "./results/plots/ecm_prep.rds")
 
 ################################################################################
