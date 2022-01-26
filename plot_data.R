@@ -40,7 +40,43 @@ if (length(needed_pkgs) > 0L) {
 rm(needed_pkgs)
 
 ################################################################################
-###                               JSOM Imports                               ###
+###                             Helper Functions                             ###
+to_data_table <- function(x, depth, col_names, ...) {
+  depth <- as.integer(depth)
+  stopifnot(depth > 1)
+
+  e <- list()
+  e[[1]] <- quote(lapply)
+  e[[2]] <- x
+  for (i in 3:(3 + depth - 1)) {
+    e[[i]] <- quote(lapply)
+  }
+  e <- c(e, quote(data.table::as.data.table))
+  print(depth)
+  rtn <- eval(as.call(e))
+  depth <- depth - 1L
+
+  while(depth > 1) {
+    print("in while loop")
+    print(depth)
+    e <- list()
+    e[[1]] <- quote(lapply)
+    e[[2]] <- rtn
+    for (i in 3:(3 + depth - 1)) {
+      e[[i]] <- quote(lapply)
+    }
+    e <- c(e, quote(data.table::rbindlist))
+    e <- c(e, substitute(idcol = d, list(d = paste0("lvl", depth))))
+    rtn <- eval(as.call(e))
+    depth <- depth - 1L
+  }
+  rtn <- data.table::rbindlist(rtn, idcol = "lvl1")
+  data.table::melt(rtn, measure.vars = as.character(2022:2050),
+                   variable.name = "year", variable.factor = FALSE)
+}
+
+################################################################################
+###                               JSON Imports                               ###
 ################################################################################
 
 # Import uncompleted ECM energy, carbon, and cost data
@@ -66,6 +102,78 @@ for(i in seq_along(ecm_prep)) {
   names(ecm_prep)[i] <- ecm_prep[[i]][["name"]]
   ecm_prep[[i]][["name"]] <- NULL
 }
+
+# there is un-competed data in the ecm_prep object.  Extract it.
+
+ecm_prep_market <- lapply(ecm_prep, getElement, "markets")
+
+# str(ecm_prep_market[[1]], max.level = 1)
+
+# the length of the lists suggest breaking apart the markets data into two sets
+str(ecm_prep_market[[1]][["Technical potential"]], max.level = 1)
+str(ecm_prep_market[[1]][["Max adoption potential"]], max.level = 1)
+
+ecm_prep_market_master_mseg <- lapply(ecm_prep_market, lapply, getElement, "master_mseg")
+ecm_prep_market_mseg_out_break <- lapply(ecm_prep_market, lapply, getElement, "mseg_out_break")
+
+# str(ecm_prep_market_master_mseg[[1]][["Technical potential"]], max.level = 1)
+# str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]], max.level = 1)
+# 
+# str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["energy"]]$savings[[1]][[4]][[1]], max.level = 1)
+# str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["carbon"]]$savings, max.level = 1)
+# str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["cost"]]$savings, max.level = 1)
+
+
+# to_data_table(ecm_prep_market_mseg_out_break, depth = 7)
+
+x <- lapply(ecm_prep_market_mseg_out_break,
+            lapply, lapply, lapply, lapply, lapply, lapply,
+            data.table::as.data.table)
+
+x <- lapply(x,
+            lapply, lapply, lapply, lapply, lapply,
+            data.table::rbindlist, idcol = "lvl7")
+
+x <- lapply(x,
+            lapply, lapply, lapply, lapply,
+            data.table::rbindlist, idcol = "lvl6")
+
+x <- lapply(x,
+            lapply, lapply, lapply,
+            data.table::rbindlist, idcol = "lvl5")
+
+x <- lapply(x,
+            lapply, lapply,
+            data.table::rbindlist, idcol = "lvl4")
+
+x <- lapply(x,
+            lapply,
+            data.table::rbindlist, idcol = "lvl3")
+
+x <- lapply(x,
+            data.table::rbindlist, idcol = "adoption_scenario")
+
+x <- data.table::rbindlist(x, idcol = "ecm")
+
+x <- data.table::melt(x, measure.vars = as.character(2022:2050),
+                      variable.factor = FALSE,
+                      variable.name = "year")
+
+
+to_data_table(depth =31)
+
+
+
+# DO THIS AT THE END
+# x <- lapply(x,
+#             lapply, lapply, lapply, lapply, lapply, lapply,
+#             function(x) {
+#               data.table::melt(x, measure.vars = names(x), 
+#                             variable.factor = FALSE, variable.name = "year")
+#             })
+
+head(x)
+
 
 ################################################################################
 ###                           Part out ECM Results                           ###
