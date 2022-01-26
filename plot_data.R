@@ -37,6 +37,7 @@ if (length(needed_pkgs) > 0L) {
              capture.output(print(x))
              ))
 }
+rm(needed_pkgs)
 
 ################################################################################
 ###                               JSOM Imports                               ###
@@ -53,9 +54,6 @@ ecm_results <-
 # Import competed energy, carbon, and cost data summed across all ECMs
 agg_results <-
   rjson::fromJSON(file = file.path('.', 'results','agg_results.json'))
-
-# Read in global metadata file
-glob_run_vars <- rjson::fromJSON(file = file.path('.', 'glob_run_vars.json'))
 
 ################################################################################
 ###                              Clean ECM Prep                              ###
@@ -122,15 +120,13 @@ markets_savings_overall <-
 markets_savings_overall <-
   data.table::rbindlist(markets_savings_overall, idcol = "ecm")
 
+# Check that the "All ECMs" rows are redundant
+markets_savings_overall[, s := sum(value), by = .(adoption_scenario, variable, year)]
+stopifnot(markets_savings_overall[ecm == "All ECMs", all.equal(value, s/2)])
+markets_savings_overall[, s := NULL]
+
 ################################################################################
 ###                 Clean Markets and Savings (By Category)                  ###
-
-str(markets_savings_by_category, max.level = 1)
-str(markets_savings_by_category[[1]], max.level = 1)
-str(markets_savings_by_category[[1]][[1]], max.level = 1)
-str(markets_savings_by_category[[1]][[2]], max.level = 1)
-str(markets_savings_by_category[[1]][[2]][[1]][[1]][[1]][[1]], max.level = 1)
-
 
 markets_savings_by_category <-
   lapply(markets_savings_by_category,
@@ -179,10 +175,7 @@ markets_savings_by_category <-
   data.table::rbindlist(markets_savings_by_category, idcol = "ecm")
 
 ################################################################################
-###                            Financial Metrics                             ###
-
-str(financial_metrics, max.level = 1)
-str(financial_metrics[[1]], max.level = 1)
+###                         Clean Finaancial Metrics                         ###
 
 financial_metrics <-
   lapply(financial_metrics, lapply, data.table::as.data.table)
@@ -205,8 +198,123 @@ financial_metrics <-
   data.table::rbindlist(financial_metrics, idcol = "ecm")
 
 ################################################################################
-# save the wanted objects as a .rds object
-saveRDS(ecm_prep, file = "./results/plots/ecm_prep.rds")
+###                         Clean On Site Generation                         ###
+on_site_generation <- non_ecm_results[["On-site Generation"]]
+
+on_site_generation <- lapply(on_site_generation, getElement, "By Category")
+
+on_site_generation <-
+  lapply(on_site_generation, lapply, lapply, data.table::as.data.table)
+
+on_site_generation <-
+  lapply(on_site_generation, lapply, lapply,
+         function(x) {
+           data.table::melt(x,
+                            measure.vars = names(x),
+                            variable.factor = FALSE,
+                            variable.name = "year")
+         })
+
+on_site_generation <-
+  lapply(on_site_generation, lapply,
+         data.table::rbindlist, idcol = "building_type")
+
+on_site_generation <-
+  lapply(on_site_generation,
+         data.table::rbindlist, idcol = "region")
+
+on_site_generation <-
+  data.table::rbindlist(on_site_generation, idcol = "variable")
+
+################################################################################
+###                   Checks and simplication of data sets                   ###
+
+# check markets_savings_by_category vs markets_savings_overall -- verify that
+# the values in the _overall version are just the sums of the values in the
+# _by_category version.  If the test passes then ther is no need to carry
+# forward the _overall version.
+mso <-
+  markets_savings_by_category[, value := sum(value),
+                              by = .(ecm, adoption_scenario, variable, year)]
+
+tst <-
+  merge(markets_savings_overall, mso,
+        by = c("ecm", "adoption_scenario", "variable", "year"))
+stopifnot(all.equal(tst$value.x, tst$value.y))
+
+markets_savings <- markets_savings_by_category
+rm(markets_savings_by_category, markets_savings_overall, mso, tst)
+
+# are any of the variables in the financial_metrics in the
+# markets_savings_by_category?  --- NOTE: originally thought about binding
+# financial_metrics with markets_savings, but that doesn't seem like a good idea
+# after looking at the resulting data set.  Leaving this note here as a reminder
+# of that.
+stopifnot(!any(
+               sapply(unique(financial_metrics$variable),
+                      function(pattern) {
+                        any(grepl(pattern, markets_savings$variable))
+                      })
+               ))
+
+# do we need the filter_variables object?
+# check for end uses
+fveu <- lapply(filter_variables, getElement, "Applicable End Uses")
+fveu <- lapply(fveu, data.table::as.data.table)
+fveu <- data.table::rbindlist(fveu, idcol = "ecm")
+data.table::setnames(fveu, "V1", "end_use")
+
+# The following are the end uses listed in the filter_variables which are _not_
+# in the markets_savings data.table
+fveu[! unique(markets_savings[, .(ecm, end_use)]), on = c("ecm", "end_use")]
+
+# any in markets_savings not in filter variables?
+tst <-
+  unique(markets_savings[, .(ecm, end_use)])[! fveu, on = c("ecm", "end_use")]
+stopifnot(nrow(tst) == 0L)
+
+# check for building classes
+fvbc <- lapply(filter_variables, getElement, "Applicable Building Classes")
+fvbc <- lapply(fvbc, data.table::as.data.table)
+fvbc <- data.table::rbindlist(fvbc, idcol = "ecm")
+data.table::setnames(fvbc, "V1", "building_class")
+
+tst <-
+  fvbc[!unique(markets_savings[, .(ecm, building_class)]),
+       on = c("ecm", "building_class")]
+stopifnot(nrow(tst) == 0L)
+
+test <-
+  unique(markets_savings[, .(ecm, building_class)]
+         ) [! fvbc, on = c("ecm", "building_class")]
+stopifnot(nrow(tst) == 0L)
+
+# check for regions:
+fvr <- lapply(filter_variables, getElement, "Applicable Regions")
+fvr <- lapply(fvr, data.table::as.data.table)
+fvr <- data.table::rbindlist(fvr, idcol = "ecm")
+data.table::setnames(fvr, "V1", "region")
+
+tst <- fvr[!unique(markets_savings[, .(ecm, region)]), on = c("ecm", "region")]
+stopifnot(nrow(tst) == 0L)
+tst <- unique(markets_savings[, .(ecm, region)])[!fvr, on = c("ecm", "region")]
+stopifnot(nrow(tst) == 0L)
+
+# NOTE: filter_variables are redundant with data in markets_savings
+
+################################################################################
+###                              Wanted Objects                              ###
+
+# set storage modes
+markets_savings[, year := as.integer(year)]
+on_site_generation[, year := as.integer(year)]
+financial_metrics[, year := as.integer(year)]
+
+# save the wanted objects as .rds files
+saveRDS(ecm_prep,           file = "./results/plots/ecm_prep.rds")
+saveRDS(markets_savings,    file = "./results/plots/markets_savings.rds")
+saveRDS(on_site_generation, file = "./results/plots/on_site_generation.rds")
+saveRDS(financial_metrics,  file = "./results/plots/financial_metrics.rds")
 
 ################################################################################
 ###                               End of File                                ###
