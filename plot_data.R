@@ -310,6 +310,28 @@ markets_savings[, year := as.integer(year)]
 on_site_generation[, year := as.integer(year)]
 financial_metrics[, year := as.integer(year)]
 
+# build_class - split into building class (Commercial or Residential) and
+# construction (New or Existing)
+markets_savings[, construction := NA_character_]
+markets_savings[grepl("New", building_class), construction := "New"]
+markets_savings[grepl("Existing", building_class), construction := "Existing"]
+markets_savings[, building_class := sub("^(.+)\\ \\(.+\\)$", "\\1", building_class)]
+
+# Simplify end uses
+markets_savings[, end_use2 := end_use]
+markets_savings[end_use %in% c("Cooling (Equip.)", "Heating (Equip.)", "Ventilation"),
+                end_use2 := "HVAC"]
+markets_savings[end_use %in% c("Cooling (Env.)", "Heating (Env.)"),
+                end_use2 := "Envelope"]
+markets_savings[end_use %in% c("Computers and Electronics"),
+                end_use2 := "Electronics"]
+
+markets_savings[, end_use2 := factor(end_use2,
+                                    levels = c('HVAC', 'Envelope', 'Lighting',
+                                               'Water Heating', 'Refrigeration',
+                                               'Cooking', 'Electronics',
+                                               'Other'))]
+
 # save the wanted objects as .rds files
 saveRDS(ecm_prep,           file = "./results/plots/ecm_prep.rds")
 saveRDS(markets_savings,    file = "./results/plots/markets_savings.rds")
