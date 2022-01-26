@@ -1,18 +1,10 @@
 ################################################################################
-# File: plot_data.R
+# File: input_data_eda.R
 #
-# Purpose: construct data sets, combinations of lists and data.frames, which
-# will be used for generating plots.  Functions for plotting are in separate
-# scripts.
+# Purpose: exploratory data analysis of the input data for plotting.
 #
-# This file is expected to be evaluated from the project root after
-# `ecm_prep.py` and `run.py` have been evaluated.
+# THIS SCRIPT IS NOT EXPECTED TO BE FULLY EXECUTABLE -- IT IS A SANDBOX
 #
-# Generated data sets:
-#
-# | File                         | Description                                 |
-# |:---------------------------- |:--------------------------------------------|
-# | ./results/plots/ecm_prep.rds | A list structure of the ecm_prep json       |
 #
 #
 ################################################################################
