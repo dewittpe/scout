@@ -58,6 +58,18 @@ competed_markets_savings <-
 # storage modes, extra colums
 competed_markets_savings[, year := as.integer(year)]
 
+# ecc (energy, carbon, cost)
+competed_markets_savings[, ecc := NA_character_]
+competed_markets_savings[grepl("Energy (Use|Savings)", variable), ecc := "energy"]
+competed_markets_savings[grepl("CO\u2082", variable), ecc := "carbon"]
+competed_markets_savings[grepl("Cost", variable), ecc := "cost"]
+
+# results_scenario
+competed_markets_savings[, results_scenario := NA_character_]
+competed_markets_savings[grepl("Baseline", variable), results_scenario := "baseline"]
+competed_markets_savings[grepl("Efficient", variable), results_scenario := "efficient"]
+competed_markets_savings[grepl("Savings|Avoided", variable), results_scenario := "savings"]
+
 # Simplify end uses
 competed_markets_savings[, end_use2 := end_use]
 
@@ -78,6 +90,9 @@ competed_markets_savings[
                        levels = c('HVAC', 'Envelope', 'Lighting',
                                   'Water Heating', 'Refrigeration',
                                   'Cooking', 'Electronics', 'Other'))]
+
+# competed/uncompeted status
+competed_markets_savings[, competed := 1L]
 
 ################################################################################
 # save the wanted objects as .rds files

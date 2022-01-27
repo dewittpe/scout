@@ -45,23 +45,23 @@ x <- lapply(ecm_prep_market_mseg_out_break,
 
 x <- lapply(x,
             lapply, lapply, lapply, lapply, lapply,
-            data.table::rbindlist, idcol = "lvl7")
+            data.table::rbindlist, idcol = "end_use")
 
 x <- lapply(x,
             lapply, lapply, lapply, lapply,
-            data.table::rbindlist, idcol = "lvl6")
+            data.table::rbindlist, idcol = "building_class")
 
 x <- lapply(x,
             lapply, lapply, lapply,
-            data.table::rbindlist, idcol = "lvl5")
+            data.table::rbindlist, idcol = "region")
 
 x <- lapply(x,
             lapply, lapply,
-            data.table::rbindlist, idcol = "lvl4")
+            data.table::rbindlist, idcol = "results_scenario")
 
 x <- lapply(x,
             lapply,
-            data.table::rbindlist, idcol = "lvl3")
+            data.table::rbindlist, idcol = "ecc")
 
 x <- lapply(x,
             data.table::rbindlist, idcol = "adoption_scenario")
@@ -69,19 +69,23 @@ x <- lapply(x,
 x <- data.table::rbindlist(x, idcol = "ecm")
 
 x <- data.table::melt(x,
-                      id.vars = c("ecm", "adoption_scenario", "lvl3", "lvl4",
-                                  "lvl5", "lvl6", "lvl7"),
+                      id.vars = c("ecm", "adoption_scenario", "ecc",
+                                  "results_scenario",
+                                  "region", "building_class", "end_use"),
                       variable.factor = FALSE,
                       variable.name = "year")
+
 
 ################################################################################
 # storage modes
 x[, year := as.integer(year)]
 
+# competed/uncompleted status
+x[, competed := 0L]
 
 ################################################################################
 # save the wanted objects as .rds files
-saveRDS(x, file = "./results/plots/uncompleted_markets.rds")
+saveRDS(x, file = "./results/plots/uncompeted_markets_savings.rds")
 
 ################################################################################
 ###                               End of File                                ###
