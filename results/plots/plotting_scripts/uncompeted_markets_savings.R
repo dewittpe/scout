@@ -83,6 +83,27 @@ x[, year := as.integer(year)]
 # competed/uncompleted status
 x[, competed := 0L]
 
+# Simplify end uses
+x[, end_use2 := end_use]
+
+x[
+  end_use %in% c("Cooling (Equip.)", "Heating (Equip.)", "Ventilation"),
+  end_use2 := "HVAC"]
+
+x[
+  end_use %in% c("Cooling (Env.)", "Heating (Env.)"),
+  end_use2 := "Envelope"]
+
+x[
+  end_use %in% c("Computers and Electronics"),
+  end_use2 := "Electronics"]
+
+x[
+  , end_use2 := factor(end_use2,
+                       levels = c('HVAC', 'Envelope', 'Lighting',
+                                  'Water Heating', 'Refrigeration',
+                                  'Cooking', 'Electronics', 'Other'))]
+
 ################################################################################
 # save the wanted objects as .rds files
 saveRDS(x, file = "./results/plots/uncompeted_markets_savings.rds")

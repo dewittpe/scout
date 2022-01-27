@@ -9,6 +9,136 @@
 #
 ################################################################################
 
+
+# Try to get the same results (data) as the .xlsx files from the plots.R script.
+rm(list = ls())
+fm  <- data.table::setDT(readRDS("./results/plots/financial_metrics.rds"))
+cms <- data.table::setDT(readRDS("./results/plots/competed_markets_savings.rds"))
+ums <- data.table::setDT(readRDS("./results/plots/uncompeted_markets_savings.rds"))
+
+cms[
+    adoption_scenario == "Max adoption potential" &
+    ecc == "cost" & 
+    grepl("Best Com\\. Air Sealing \\(Exist\\)", ecm) &
+    grepl("Heating|Cooling", end_use) &
+    year == 2022
+  ] [
+  ,
+  .(
+      .N
+      , min = min(value) * 1e-9
+      , q05 = quantile(value, prob = 0.05) * 1e-9
+      , median = median(value) * 1e-9
+      , mean = mean(value) * 1e-9
+      , q95 = quantile(value, prob = 0.95) * 1e-9
+      , max = max(value) * 1e-9
+      , sum = sum(value) * 1e-9
+      # , regions = paste(region, collapse = ',')
+      # , end_uses = paste(end_use, collapse = ',')
+    )
+  , by = .(ecm, adoption_scenario, building_class, results_scenario, variable)
+  ]
+
+
+
+
+data.table::dcast(fm[grepl("Best Com\\.", ecm)], ... ~ year, value.var = "value")
+
+fm[grepl("Best Com\\. Air Sealing \\(Exist\\)", ecm) & year == 2050,  ]
+
+ums[
+    adoption_scenario == "Max adoption potential" &
+    grepl("Best Com\\. Air Sealing \\(Exist\\)", ecm) &
+    building_class == "Commercial (Existing)" &
+    # results_scenario == "baseline" &
+    ecc == "energy" &
+    end_use2 == "Envelope"
+    ,  
+    .(
+        min = min(value * 1e-9)
+      , q05 = quantile(value * 1e-9, prob = 0.05)
+      , median = median(value * 1e-9)
+      , mean = mean(value * 1e-9)
+      , q95 = quantile(value * 1e-9, prob = 0.95)
+      , max = max(value * 1e-9)
+      , sum = sum(value * 1e-9)
+      )
+    ,
+    by = .(ecm, adoption_scenario, building_class, results_scenario)
+    ]
+
+(1 / 1000000000 * 18034379) 
+
+
+uncompeted_markets[, .N, by = .(lvl3)]
+uncompeted_markets[, .N, by = .(results_scenario)]
+uncompeted_markets[, .N, by = .(region)]
+
+cms <- data.table::copy(competed_markets_savings)
+
+
+data.table::dcast(cms, ... ~ year, value.var = "value")
+
+
+cms[grepl("Emissions", variable), .N, by = .(variable)]
+cms[, results_scenario := NA_character_]
+cms[grepl("^Baseline", variable), results_scenario := "Baseline"]
+cms[grepl("^Efficient", variable), results_scenario := "Efficient"]
+cms[grepl("^Avoided", variable), results_scenario := "Efficient"]
+
+cms[grepl("Emissions", variable), .N, by = .(variable)]
+
+print(cms[, .N, by = .(variable)], n = Inf)
+
+data.table::dcast(
+cms[, .(value = sum(value)), by = .(ecm, adoption_scenario, end_use, end_use2, variable, year)]
+, ... ~ year
+, value.var = "value"
+)[ecm == "Best Com. Air Sealing (Exist)" & grepl("Energy Use", variable), ecm:`2026`]
+
+
+# sum up over region
+ms <-
+  ms[
+    , .(value = sum(value))
+    , by = .(ecm, adoption_scenario, variable, building_class, end_use2, year)
+    ]
+
+# set building class as Commercial, Residential, or Multiple
+# Muliple only needed if there is an ecm with more than one building type:
+if ( ms[, .N, by = .(ecm, building_class)][, any(duplicated(ecm))] ) {
+  ms <-
+    ms[
+       , building_class := data.table::fifelse(.N > 1, "Multiple", building_class)
+       , by = .(ecm, adoption_scenario, variable, end_use2, year)
+       ]
+}
+
+# merge on the financial metrics
+ms <-
+  merge(ms,
+        data.table::dcast(financial_metrics, ... ~ variable, value.var = "value"),
+        by = c("ecm", "year"))
+
+
+ms <- data.table::dcast(ms, ... ~ variable, value.var = "value")
+
+
+
+
+
+ggplot2::ggplot(ms[year == 2050 & adoption_scenario == "Max adoption potential"]) +
+  ggplot2::theme_bw(base_family = "Times New Roman") +
+  ggplot2::aes_string(x = "`Avoided CO\u2082 Emissions (MMTons)`",
+                      y = "`IRR (%)`",
+                      shape = "building_class",
+                      color = "end_use2") +
+  ggplot2::geom_point() +
+  ggplot2::scale_color_brewer(palette = "Dark2")
+
+
+stop("Below is stuff from initial data import and cleaning")
+
 ################################################################################
 ###                       Check for needed R packages                        ###
 
@@ -46,6 +176,8 @@ ecm_results <-
 # Import competed energy, carbon, and cost data summed across all ECMs
 agg_results <-
   rjson::fromJSON(file = file.path('.', 'results','agg_results.json'))
+
+str(agg_results, max.level = 1)
 
 ################################################################################
 ###                              Clean ECM Prep                              ###
