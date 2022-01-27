@@ -16,11 +16,14 @@ fm  <- data.table::setDT(readRDS("./results/plots/financial_metrics.rds"))
 cms <- data.table::setDT(readRDS("./results/plots/competed_markets_savings.rds"))
 ums <- data.table::setDT(readRDS("./results/plots/uncompeted_markets_savings.rds"))
 
-cms[
+ms <- rbind(cms, ums, fill = TRUE)
+
+ms[
     adoption_scenario == "Max adoption potential" &
     ecc == "cost" & 
-    grepl("Best Com\\. Air Sealing \\(Exist\\)", ecm) &
-    grepl("Heating|Cooling", end_use) &
+    grepl("Prospective Commercial SSL", ecm) &
+    # grepl("Heating|Cooling", end_use) &
+    results_scenario == "baseline" & 
     year == 2022
   ] [
   ,
@@ -33,10 +36,13 @@ cms[
       , q95 = quantile(value, prob = 0.95) * 1e-9
       , max = max(value) * 1e-9
       , sum = sum(value) * 1e-9
-      # , regions = paste(region, collapse = ',')
-      # , end_uses = paste(end_use, collapse = ',')
+      , building_class = paste(unique(building_class), collapse = ',')
+      , regions = paste(unique(region), collapse = ',')
+      , end_uses = paste(unique(end_use), collapse = ',')
     )
-  , by = .(ecm, adoption_scenario, building_class, results_scenario, variable)
+  # , by = .(ecm, adoption_scenario, competed, building_class, results_scenario, variable)
+  # , by = .(ecm, adoption_scenario, competed, building_class, results_scenario)
+  , by = .(ecm, adoption_scenario, competed, results_scenario)
   ]
 
 
