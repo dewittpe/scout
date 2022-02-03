@@ -3,6 +3,9 @@
 ecm_results <-
   rjson::fromJSON(file = file.path('.', 'results','ecm_results.json'))
 
+str(ecm_results, max.level = 1)
+str(ecm_results[[1]], max.level = 1)
+
 ################################################################################
 # extract the markets and savings data
 competed_markets_savings <-

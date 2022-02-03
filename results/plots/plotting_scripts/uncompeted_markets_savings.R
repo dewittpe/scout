@@ -23,7 +23,8 @@ for(i in seq_along(ecm_prep)) {
 
 ecm_prep_market <- lapply(ecm_prep, getElement, "markets")
 
-# str(ecm_prep_market[[1]], max.level = 1)
+# first level of the object are the ECMs, under that are the adoption scenarios
+str(ecm_prep_market[[1]], max.level = 1)
 
 # the length of the lists suggest breaking apart the markets data into two sets
 str(ecm_prep_market[[1]][["Technical potential"]], max.level = 1)
@@ -32,12 +33,105 @@ str(ecm_prep_market[[1]][["Max adoption potential"]], max.level = 1)
 ecm_prep_market_master_mseg <- lapply(ecm_prep_market, lapply, getElement, "master_mseg")
 ecm_prep_market_mseg_out_break <- lapply(ecm_prep_market, lapply, getElement, "mseg_out_break")
 
-# str(ecm_prep_market_master_mseg[[1]][["Technical potential"]], max.level = 1)
-# str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]], max.level = 1)
+# Explore the structure of the two lists.  For master_mseg there are common
+# structures but at different levels... for example:
+# ecm -- adoption_scenario -- energy/carbon -- total/competed -- baseline/efficient
+# ecm -- adoption_scenario -- cost -- energy/carbon -- total/competed -- baseline/efficient
+# 
+# WHY ARE THERE COMPETED VALUES?
 #
-# str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["energy"]]$savings[[1]][[4]][[1]], max.level = 1)
-# str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["carbon"]]$savings, max.level = 1)
-# str(ecm_prep_market_mseg_out_break[[1]][["Max adoption potential"]][["cost"]]$savings, max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]], max.level = 1)
+
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["stock"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["stock"]][["total"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["stock"]][["total"]][["all"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["stock"]][["total"]][["measure"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["stock"]][["competed"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["stock"]][["competed"]][["all"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["stock"]][["competed"]][["measure"]], max.level = 1)
+
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["energy"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["energy"]][["total"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["energy"]][["total"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["energy"]][["total"]][["efficient"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["energy"]][["competed"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["energy"]][["competed"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["energy"]][["competed"]][["efficient"]], max.level = 1)
+
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["carbon"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["carbon"]][["total"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["carbon"]][["total"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["carbon"]][["total"]][["efficient"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["carbon"]][["competed"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["carbon"]][["competed"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["carbon"]][["competed"]][["efficient"]], max.level = 1)
+
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["stock"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["stock"]][["total"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["stock"]][["total"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["stock"]][["total"]][["efficient"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["stock"]][["competed"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["stock"]][["competed"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["stock"]][["competed"]][["efficient"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["energy"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["energy"]][["total"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["energy"]][["total"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["energy"]][["total"]][["efficient"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["energy"]][["competed"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["energy"]][["competed"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["energy"]][["competed"]][["efficient"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["carbon"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["carbon"]][["total"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["carbon"]][["total"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["carbon"]][["total"]][["efficient"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["carbon"]][["competed"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["carbon"]][["competed"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["cost"]][["carbon"]][["competed"]][["efficient"]], max.level = 1)
+
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["lifetime"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["lifetime"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_master_mseg[[1]][["Technical potential"]][["lifetime"]][["measure"]], max.level = 1)
+
+
+
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]], max.level = 1)
+
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ1"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ1"]][["Residential (New)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ1"]][["Residential (Existing)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ1"]][["Commercial (New)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ1"]][["Commercial (New)"]][["Heating (Equip.)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ1"]][["Commercial (Existing)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ2"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ3"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ4"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["baseline"]][["AIA CZ5"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ1"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ1"]][["Residential (New)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ1"]][["Residential (Existing)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ1"]][["Commercial (New)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ1"]][["Commercial (New)"]][["Heating (Equip.)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ1"]][["Commercial (Existing)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ2"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ3"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ4"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["efficient"]][["AIA CZ5"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ1"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ1"]][["Residential (New)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ1"]][["Residential (Existing)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ1"]][["Commercial (New)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ1"]][["Commercial (New)"]][["Heating (Equip.)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ1"]][["Commercial (Existing)"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ2"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ3"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ4"]], max.level = 1)
+str(ecm_prep_market_mseg_out_break[[1]][["Technical potential"]][["energy"]][["savings"]][["AIA CZ5"]], max.level = 1)
+
 
 x <- lapply(ecm_prep_market_mseg_out_break,
             lapply, lapply, lapply, lapply, lapply, lapply,

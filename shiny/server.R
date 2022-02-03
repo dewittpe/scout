@@ -76,6 +76,28 @@ server <- function(input, output, session) {
 
   })
 
+  output$co2emmissions <- renderPlot({
+    d <- ecm_data()
+
+    # d <- data.table::copy(ms)
+    d <- subset(d, grepl("CO..Emissions", variable))
+    d <- subset(d, results_scenario != "savings")
+
+    d <-
+      d[, .(value = sum(value),
+            region = paste(unique(region), collapse = ", "),
+            building_class = paste(unique(building_class), collapse = ", "),
+            end_uses = paste(unique(end_use), collapse = ", ")
+            ),
+        by = .(ecm, adoption_scenario, year)]
+
+    ggplot2::ggplot(d) +
+      ggplot2::aes(x = year, y = value, color = results_scenario, linetype = competed) +
+      ggplot2::geom_point() +
+      ggplot2::geom_line() +
+      ggplot2::facet_wrap( ~ ecm)
+
+  })
 
   output$mainplot <- renderPlot({
     ggplot2::ggplot(mtcars) +
