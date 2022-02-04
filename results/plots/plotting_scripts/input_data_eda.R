@@ -190,8 +190,10 @@ ms_cost[ecm == "Prospective Commercial SSL"]
 
 test_cost <-
   merge(ms_cost, xlsx_cost, all = TRUE,
-        by = c("ecm", "year", "adoption_scenario", "results_scenario", "competed",
-               "building_classes", "region", "end_uses"),
+        by = c("ecm", "year", "adoption_scenario", "results_scenario", "competed"
+               #, "building_classes", "region"
+               #, "end_uses"
+               ),
         suffixes = c("_ms", "_xlsx"))
 
 test_cost
@@ -202,19 +204,28 @@ test_cost[, value_ms := value_ms * 1e-9]
 
 test_cost[, percent_delta := 100 * abs(value_ms - value_xlsx) / value_xlsx]
 
-ggplot2::ggplot(test_cost[percent_delta > 1e-8]) +
-  ggplot2::aes(x = value_ms, y = value_xlsx, color = end_uses) +
-  ggplot2::geom_point() +
+# ggplot2::ggplot(test_cost[percent_delta > 1e-8]) +
+ggplot2::ggplot(test_cost[percent_delta > 1]) +
+  ggplot2::theme_bw() +
+  ggplot2::aes(x = value_ms, y = value_xlsx, color = ecm) +#factor(year)) +#, color = building_classes_ms, shape = building_classes_xlsx) +
+  ggplot2::geom_point(alpha = 0.8) +
   ggplot2::geom_abline(intercept = 0, slope = 1) +
-  ggplot2::facet_wrap( ~ adoption_scenario + results_scenario + competed)
+  ggplot2::facet_wrap(~ adoption_scenario + results_scenario + building_classes_ms, scales = "free") +
+  ggplot2::ggtitle("observations were 100 * abs(value_ms - value_xlsx) / value_xlsx > 1")
 
 # differences are only on competed values?
 stopifnot(test_cost[percent_delta > 1e-8, all(competed == "competed")])
 
-test_cost[percent_delta > 1e-8]
+test_cost[competed == "competed", .N]
+test_cost[percent_delta > 1e-8, .N]
+
+nrow(test_cost)
+nrow(test_cost[percent_delta > 1e-8])
+nrow(test_cost[percent_delta > 0.01])
 
 # Why are there rows in test_cost that do not have both _ms and _xlsx values?
-test_cost[is.na(value_ms) | is.na(value_xlsx)]
+test_cost[building_classes_ms != building_classes_xlsx]
+test_cost[end_uses_ms != end_uses_xlsx]
 
 # one possible issue -- the building classes 
 # xlsx have only two options whereas ms has six
@@ -288,8 +299,24 @@ stopifnot(length(unique(ms_carbon$building_classes)) == 6L)
 xlsx_carbon[, unique(building_classes)]
 ms_carbon[, unique(building_classes)]
 
-# if we ignore the building classes a visual spot check suggests there are still
-# differences between the sets with respect to the carbon saving values.
+test_carbon <-
+  merge(ms_carbon, xlsx_carbon, all = TRUE,
+        by = c("ecm", "year", "adoption_scenario", "results_scenario", "competed"
+               #, "building_classes"
+               , "region"
+               # , "end_uses"
+               ),
+        suffixes = c("_ms", "_xlsx"))
+test_carbon[is.na(value_ms) | is.na(value_xlsx)]
+test_carbon
+
+if (nrow(
+test_carbon[!(value_ms > value_xlsx - .Machine$double.eps^0.5 & value_ms < value_xlsx + .Machine$double.eps^0.5) ]
+) == 0L) {
+  message("carbon seems to be okay between ms an xlsx")
+} else {
+  message("carbon may differ between ms and xlsx")
+}
 
 
 ################################################################################
