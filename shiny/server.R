@@ -92,7 +92,7 @@ server <- function(input, output, session) {
 
   co2emmissions_plot_height <- reactive(max(200, 200 * length(input$ecm_checkbox)))
 
-  observe({output$co2emmissions_plot <- renderPlot({ #{{{
+  observe({output$co2emmissions_plot <- plotly::renderPlotly({ #{{{
     d <- ms_data()
 
     # d <- data.table::copy(ms) # for dev work
@@ -102,17 +102,17 @@ server <- function(input, output, session) {
     if (input$all_ecms == "1") {
       g <- ggplot2::qplot(x = 1, y = 1, geom = "text", label = "select between 1 and 12 ecms to plot") +
         ggplot2::theme_void()
-      return(g)
+      return(plotly::ggplotly(g))
     } else {
       d <- subset(d, ecm %in% input$ecm_checkbox)
       if (nrow(d) == 0) {
         g <- ggplot2::qplot(x = 1, y = 1, geom = "text", label = "select between 1 and 12 ecms to plot") +
           ggplot2::theme_void()
-        return(g)
+        return(plotly::ggplotly(g))
       } else if (length(unique(d$ecm)) > 12) {
         g <- ggplot2::qplot(x = 1, y = 1, geom = "text", label = "select 12 or fewer ecms") +
           ggplot2::theme_void()
-        return(g)
+        return(plotly::ggplotly(g))
       }
     }
 
@@ -125,6 +125,7 @@ server <- function(input, output, session) {
         by = .(ecm, adoption_scenario, year, results_scenario, competed)]
 
 
+    g <-
     # ggplot2::ggplot(d[grepl("Wall", ecm)]) + # for dev work
     ggplot2::ggplot(d) +
       ggplot2::theme_bw() +
@@ -144,13 +145,14 @@ server <- function(input, output, session) {
       ggplot2::facet_grid(ecm ~ adoption_scenario) +
       ggplot2::ylab("CO\u2082 Emmissions (MMTons)")
 
-  },
-  height = co2emmissions_plot_height()
+      return(plotly::ggplotly(g))
+
+  }, # height = co2emmissions_plot_height()
   )
   })#}}}
 
   output$co2emmissions_ui <- renderUI({
-    plotOutput("co2emmissions_plot", height = co2emmissions_plot_height())
+    plotlyOutput("co2emmissions_plot", height = co2emmissions_plot_height())
   })
 
 }

@@ -30,7 +30,9 @@ ui <- shinyUI(fluidPage(
                                                             type = "tabs",
                                                             tabPanel("Notes", includeMarkdown("notes.md")),
                                                             tabPanel("Financial Metrics", plotly::plotlyOutput("fm_plot")),
-                                                            tabPanel("CO\u2082 Emmissions", uiOutput("co2emmissions_ui"))#plotOutput("co2emmissions"))
+                                                            tabPanel("CO\u2082 Emmissions", uiOutput("co2emmissions_ui")),
+                                                            tabPanel("Cost Effective Avoided CO\u2082", "under construction"),
+                                                            tabPanel("Total Avoided CO\u2082", "under construciton")
                                                 ) # end tabsetPanel
                                       ) # end mainPanel
                                       ), # end of sidebarLayout
