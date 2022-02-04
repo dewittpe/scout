@@ -16,10 +16,10 @@ fm[grepl("IRR", variable) & value != 999, value := value * 100]
 # server definition
 server <- function(input, output, session) {
 
-  ecm_data <- reactive({ ms })
-  fm_data <- reactive({ fm })
+  ms_data  <- reactive({ ms })
+  fm_data  <- reactive({ fm })
 
-  output$fm_plot <- plotly::renderPlotly({
+  output$fm_plot <- plotly::renderPlotly({ #{{{
 
     if (input$all_ecms == "1") {
       fm_plot_data <- fm_data()
@@ -74,14 +74,33 @@ server <- function(input, output, session) {
     }
     subplot(ps, nrows = 2, shareY = FALSE, shareX = TRUE, margin = 0.05)
 
-  })
+  }) # }}}
 
-  output$co2emmissions <- renderPlot({
-    d <- ecm_data()
+  co2emmissions_plot_height <- reactive(max(200, 200 * length(input$ecm_checkbox)))
 
-    # d <- data.table::copy(ms)
-    d <- subset(d, grepl("CO..Emissions", variable))
-    d <- subset(d, results_scenario != "savings")
+  observe({output$co2emmissions_plot <- renderPlot({ #{{{
+    d <- ms_data()
+
+    # d <- data.table::copy(ms) # for dev work
+    d <- subset(d, ecc == "carbon")
+    d <- subset(d, results_scenario %in% c("baseline", "efficient"))
+
+    if (input$all_ecms == "1") {
+      g <- ggplot2::qplot(x = 1, y = 1, geom = "text", label = "select between 1 and 12 ecms to plot") +
+        ggplot2::theme_void()
+      return(g)
+    } else {
+      d <- subset(d, ecm %in% input$ecm_checkbox)
+      if (nrow(d) == 0) {
+        g <- ggplot2::qplot(x = 1, y = 1, geom = "text", label = "select between 1 and 12 ecms to plot") +
+          ggplot2::theme_void()
+        return(g)
+      } else if (length(unique(d$ecm)) > 12) {
+        g <- ggplot2::qplot(x = 1, y = 1, geom = "text", label = "select 12 or fewer ecms") +
+          ggplot2::theme_void()
+        return(g)
+      }
+    }
 
     d <-
       d[, .(value = sum(value),
@@ -89,14 +108,35 @@ server <- function(input, output, session) {
             building_class = paste(unique(building_class), collapse = ", "),
             end_uses = paste(unique(end_use), collapse = ", ")
             ),
-        by = .(ecm, adoption_scenario, year)]
+        by = .(ecm, adoption_scenario, year, results_scenario, competed)]
 
+
+    # ggplot2::ggplot(d[grepl("Wall", ecm)]) + # for dev work
     ggplot2::ggplot(d) +
+      ggplot2::theme_bw() +
       ggplot2::aes(x = year, y = value, color = results_scenario, linetype = competed) +
-      ggplot2::geom_point() +
+      ggplot2::geom_text(data = function(x) {
+                           dd <- unique(x[, .(ecm, end_uses = paste("End Uses:", end_uses))])
+                           dd[, year := mean(x$year)]
+                           dd[, value := max(x$value) * 1.10]
+                           dd
+            },
+                         mapping = ggplot2::aes(x = year, y = value, label = end_uses),
+            inherit.aes = FALSE
+            ) +
       ggplot2::geom_line() +
-      ggplot2::facet_wrap( ~ ecm)
+      ggplot2::scale_x_continuous(breaks = seq(2025, 2050, by = 5),
+                                  minor_breaks = seq(2022, 2050, by = 1)) +
+      ggplot2::facet_grid(ecm ~ adoption_scenario) +
+      ggplot2::ylab("CO\u2082 Emmissions (MMTons)")
 
+  },
+  height = co2emmissions_plot_height()
+  )
+  })#}}}
+
+  output$co2emmissions_ui <- renderUI({
+    plotOutput("co2emmissions_plot", height = co2emmissions_plot_height())
   })
 
   output$mainplot <- renderPlot({

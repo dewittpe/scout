@@ -15,7 +15,7 @@ ui <- shinyUI(fluidPage(
                                                    width = 3
                                                    ,
                                                    radioButtons(inputId = "ecm_agg",
-                                                                label = "",
+                                                                label = "For Financial Metrics",
                                                                 choices = c("Aggregate ECMs" = 1, "Speghitti Plot" = 2),
                                                                 selected = 1)
                                                    ,
@@ -26,16 +26,20 @@ ui <- shinyUI(fluidPage(
                                                    ,
                                                    conditionalPanel(
                                                                     condition = "input.all_ecms == '2'",
-                                                                    checkboxGroupInput(inputId = "ecm_checkbox",
-                                                                                       "Select ECMs",
-                                                                                       sort(unique(ms$ecm))))
+                                                                    selectInput(inputId = "ecm_checkbox",
+                                                                                label = "Select ECMs",
+                                                                                choices = sort(unique(ms$ecm)),
+                                                                                multiple = TRUE,
+                                                                                selectize = FALSE
+                                                                                ))
                                       ) # end of sidebarPanel
                                       ,
                                       mainPanel(
                                                 tabsetPanel(
                                                             type = "tabs",
+                                                            tabPanel("Notes", includeMarkdown("notes.md")),
                                                             tabPanel("Financial Metrics", plotly::plotlyOutput("fm_plot")),
-                                                            tabPanel("CO\u2082 Emmissions", plotOutput("co2emmissions"))
+                                                            tabPanel("CO\u2082 Emmissions", uiOutput("co2emmissions_ui"))#plotOutput("co2emmissions"))
                                                 ) # end tabsetPanel
                                       ) # end mainPanel
                                       ), # end of sidebarLayout

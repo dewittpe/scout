@@ -7,6 +7,9 @@
 ecm_prep <-
   rjson::fromJSON(file = file.path('.', 'supporting_data','ecm_prep.json'))
 
+str(ecm_prep, max.level = 1)
+str(ecm_prep[[1]], max.level = 1)
+
 ################################################################################
 ###                              Clean ECM Prep                              ###
 
@@ -19,9 +22,90 @@ for(i in seq_along(ecm_prep)) {
   ecm_prep[[i]][["name"]] <- NULL
 }
 
-# there is un-competed data in the ecm_prep object.  Extract it.
+str(ecm_prep[[1]], max.level = 1)
+
+# work towards emptying out ecm_prep to make sure all relevent data has been
+# extracted.  The following sections will turn the elements of ecm_prep into
+# several data.tables and then a final merge of the relevent data will be done
+# at the end of this script.
+
+################################################################################
+###                            Omit simple things                            ###
+
+# omit 'remove' if it is all FALSE
+stopifnot(all(!sapply(ecm_prep, getElement, "remove")))
+
+for(i in seq_along(ecm_prep)) {
+  ecm_prep[[i]][["remove"]] <- NULL
+}
+
+################################################################################
+###                                  _notes                                  ###
+ecm_prep_notes <- lapply(ecm_prep, getElement, "_notes")
+ecm_prep_notes <- lapply(ecm_prep_notes, data.table::as.data.table)
+ecm_prep_notes <- data.table::rbindlist(ecm_prep_notes, idcol = "ecm")
+data.table::setnames(ecm_prep_notes, old = "V1", new = "notes")
+
+for(i in seq_along(ecm_prep)) {
+  ecm_prep[[i]][["_notes"]] <- NULL
+}
+
+
+################################################################################
+###                                User Opts                                 ###
+str(ecm_prep[[1]][["usr_opts"]], max.level = 1)
+ecm_prep_user_opts <- lapply(ecm_prep, getElement, "usr_opts")
+ecm_prep_user_opts <- lapply(ecm_prep_user_opts, data.table::as.data.table)
+ecm_prep_user_opts <- data.table::rbindlist(ecm_prep_user_opts, idcol = "ecm")
+
+for(i in seq_along(ecm_prep)) {
+  ecm_prep[[i]][["usr_opts"]] <- NULL
+}
+
+################################################################################
+###                                retro rate                                ###
+str(ecm_prep[[1]][["retro_rate"]])
+ecm_prep_retro_rate <- lapply(ecm_prep, getElement, "retro_rate")
+ecm_prep_retro_rate <- lapply(ecm_prep_retro_rate, data.table::as.data.table, keep.rownames = TRUE)
+ecm_prep_retro_rate <- data.table::rbindlist(ecm_prep_retro_rate, idcol = "ecm")
+ecm_prep_retro_rate <- data.table::melt(ecm_prep_retro_rate, id.vars = ("ecm"),
+                                        variable.name = "year",
+                                        value.name = "retro_rate")
+for(i in seq_along(ecm_prep)) {
+  ecm_prep[[i]][["retro_rate"]] <- NULL
+}
+
+################################################################################
+###                             Technology Type                              ###
+
+ecm_prep_technology_type <- lapply(ecm_prep, getElement, "technology_type")
+ecm_prep_technology_type <-
+  lapply(ecm_prep_technology_type,
+         data.table::as.data.table,
+         keep.rownames = TRUE)
+
+ecm_prep_technology_type <-
+  data.table::rbindlist(ecm_prep_technology_type, 
+                        use.names = TRUE,
+                        fill = TRUE,
+                        idcol = "ecm")
+
+data.table::setnames(ecm_prep_technology_type,
+                     old = c("primary", "secondary"),
+                     new = c("primary_tech_type", "secondary_tech_type"))
+
+for(i in seq_along(ecm_prep)) {
+  ecm_prep[[i]][["technology_type"]] <- NULL
+}
+
+################################################################################
+# Market Data Extract
 
 ecm_prep_market <- lapply(ecm_prep, getElement, "markets")
+for(i in seq_along(ecm_prep)) {
+  ecm_prep[[i]][["markets"]] <- NULL
+  ecm_prep[[i]][["yrs_on_mkt"]] <- NULL # implied in the market data
+}
 
 # first level of the object are the ECMs, under that are the adoption scenarios
 str(ecm_prep_market[[1]], max.level = 1)
