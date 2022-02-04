@@ -2,10 +2,6 @@
 ###                   Define User Interface for Shiny App                    ###
 ################################################################################
 
-library(shiny)
-library(data.table)
-library(ggplot2)
-library(plotly)
 
 ui <- shinyUI(fluidPage(
                         titlePanel("Scout ECM Summaries"),
@@ -26,12 +22,7 @@ ui <- shinyUI(fluidPage(
                                                    ,
                                                    conditionalPanel(
                                                                     condition = "input.all_ecms == '2'",
-                                                                    selectInput(inputId = "ecm_checkbox",
-                                                                                label = "Select ECMs",
-                                                                                choices = sort(unique(ms$ecm)),
-                                                                                multiple = TRUE,
-                                                                                selectize = FALSE
-                                                                                ))
+                                                                    uiOutput("ecm_select_ui"))
                                       ) # end of sidebarPanel
                                       ,
                                       mainPanel(

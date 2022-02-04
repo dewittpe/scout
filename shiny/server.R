@@ -2,6 +2,11 @@
 ###                       Define Server for Shiny App                        ###
 ################################################################################
 
+library(shiny)
+library(data.table)
+library(ggplot2)
+library(plotly)
+
 # data import
 fm  <- data.table::setDT(readRDS("../results/plots/financial_metrics.rds"))
 cms <- data.table::setDT(readRDS("../results/plots/competed_markets_savings.rds"))
@@ -18,6 +23,15 @@ server <- function(input, output, session) {
 
   ms_data  <- reactive({ ms })
   fm_data  <- reactive({ fm })
+
+  output$ecm_select_ui <- renderUI({ #{{{
+    selectInput(inputId = "ecm_checkbox",
+                label = "Select ECMs",
+                choices = sort(unique(ms_data()$ecm)),
+                multiple = TRUE,
+                selectize = FALSE
+    )
+  }) # }}}
 
   output$fm_plot <- plotly::renderPlotly({ #{{{
 
@@ -139,15 +153,6 @@ server <- function(input, output, session) {
     plotOutput("co2emmissions_plot", height = co2emmissions_plot_height())
   })
 
-  output$mainplot <- renderPlot({
-    ggplot2::ggplot(mtcars) +
-      ggplot2::aes(x = hp, y = mpg) +
-      ggplot2::geom_point()
-    # ggplot2::ggplot(ms[year == 2022]) +
-    #   ggplot2::aes(x = year, y = value) +
-    #   ggplot2::geom_point() +
-    #   ggplot2::facet_grid(ecc ~ adoption_scenario + competed)
-  })
 }
 
 
