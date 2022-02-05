@@ -69,8 +69,8 @@ for ecm in ecm_results_keys:
 fm.reset_index(inplace = True)
 fm.rename(columns = {"index" : "year"}, inplace = True)
 
-print("Writing ./results/plots/financial_metrics.csv")
-fm.to_csv("./results/plots/financial_metrics.csv")
+print("Writing ./results/plots/financial_metrics.parquet")
+fm.to_parquet("./results/plots/financial_metrics.parquet")
 
 ################################################################################
 ##                         Competed Market Savings                          ###
@@ -88,19 +88,19 @@ for ecm in ecm_results_keys:
         df2 = pd.DataFrame()
         for v in list(ecm_results[ecm][CMS][ap].keys()):
             df3 = pd.DataFrame()
-            for cz in list(ecm_results[ecm][CMS][ap][v].keys()):
+            for rg in list(ecm_results[ecm][CMS][ap][v].keys()):
                 df4 = pd.DataFrame()
-                for bg in list(ecm_results[ecm][CMS][ap][v][cz].keys()):
+                for bg in list(ecm_results[ecm][CMS][ap][v][rg].keys()):
                     df5 = pd.DataFrame()
-                    for eu in list(ecm_results[ecm][CMS][ap][v][cz][bg].keys()):
+                    for eu in list(ecm_results[ecm][CMS][ap][v][rg][bg].keys()):
                         x = pd.DataFrame.from_dict(
-                                ecm_results[ecm][CMS][ap][v][cz][bg][eu]
+                                ecm_results[ecm][CMS][ap][v][rg][bg][eu]
                                 , orient = 'index'
                                 , columns = ['value']
                                 )
                         x['end_use'] = eu
                         x['building_class'] = bg
-                        x['climate_zone'] = cz
+                        x['region'] = rg
                         x['variable'] = v
                         x['adoption_scenario'] = ap
                         x['ecm'] = ecm
@@ -115,8 +115,8 @@ for ecm in ecm_results_keys:
 cms.reset_index(inplace = True)
 cms.rename(columns = {"index" : "year"}, inplace = True)
 
-print("Writing ./results/plots/competed_market_savings.csv")
-cms.to_csv("./results/plots/competed_market_savings.csv")
+print("Writing ./results/plots/competed_market_savings.parquet")
+cms.to_parquet("./results/plots/competed_market_savings.parquet")
 
 ################################################################################
 ###                        Uncompeted Market Savings                         ###
@@ -134,16 +134,16 @@ for i in range(len(ecm_prep)):
             for rs in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc]\
                     .keys()):
                 df4 = pd.DataFrame()
-                for cz in list(ecm_prep[i]["markets"][ap]["mseg_out_break"]\
+                for rg in list(ecm_prep[i]["markets"][ap]["mseg_out_break"]\
                         [ecc][rs].keys()):
                     df5 = pd.DataFrame()
                     for bc in list(ecm_prep[i]["markets"][ap]["mseg_out_break"]\
-                            [ecc][rs][cz].keys()):
+                            [ecc][rs][rg].keys()):
                         df6 = pd.DataFrame()
                         for eu in list(ecm_prep[i]["markets"][ap]\
-                                ["mseg_out_break"][ecc][rs][cz][bc].keys()):
+                                ["mseg_out_break"][ecc][rs][rg][bc].keys()):
                             d = ecm_prep[i]["markets"][ap]["mseg_out_break"]\
-                                    [ecc][rs][cz][bc][eu]
+                                    [ecc][rs][rg][bc][eu]
                             if (len(d) > 0):
                                 x = pd.DataFrame.from_dict(
                                         d
@@ -151,7 +151,7 @@ for i in range(len(ecm_prep)):
                                         , columns = ['value'])
                                 x['end_use'] = eu
                                 x['building_class'] = bc
-                                x['climate_zone'] = cz
+                                x['region'] = rg
                                 x['results_scenario'] = rs
                                 x['ecc'] = ecc
                                 x['adoption_scenario'] = ap
@@ -168,8 +168,8 @@ for i in range(len(ecm_prep)):
 ums.reset_index(inplace = True)
 ums.rename(columns = {"index" : "year"}, inplace = True)
 
-print("Writing ./results/plots/uncompeted_market_savings.csv")
-ums.to_csv("./results/plots/uncompeted_market_savings.csv")
+print("Writing ./results/plots/uncompeted_market_savings.parquet")
+ums.to_parquet("./results/plots/uncompeted_market_savings.parquet")
 
 ################################################################################
 ###                               End of File                                ###
