@@ -127,6 +127,16 @@ for ecm in ecm_results_keys:
 cms.reset_index(inplace = True)
 cms.rename(columns = {"index" : "year"}, inplace = True)
 
+cms["competed"] = "Competed"
+cms["results_scenario"] = "savings"
+
+cms.loc[cms["variable"].str.contains("Baseline"), "results_scenario"] = "baseline"
+cms.loc[cms["variable"].str.contains("Efficient"), "results_scenario"] = "efficient"
+
+cms["ecc"] = "carbon"
+cms.loc[cms["variable"].str.contains("Energy"), "ecc"] = "energy"
+cms.loc[cms["variable"].str.contains("Cost"), "ecc"] = "cost"
+
 print("Writing ./results/plots/competed_market_savings.parquet")
 cms.to_parquet("./results/plots/competed_market_savings.parquet")
 
@@ -179,6 +189,7 @@ for i in range(len(ecm_prep)):
 # reset the index and rename -- the index is the year.
 ums.reset_index(inplace = True)
 ums.rename(columns = {"index" : "year"}, inplace = True)
+ums["competed"] = "Uncompeted"
 
 print("Writing ./results/plots/uncompeted_market_savings.parquet")
 ums.to_parquet("./results/plots/uncompeted_market_savings.parquet")
