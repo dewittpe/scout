@@ -51,15 +51,16 @@ plot_data = cms.merge(fm, how = "left", on = ["ecm", "year"])
 plot_data["year"] = plot_data["year"].astype(str).astype(int)
 
 
-def plot_year(y1 = 2022, y2 = 2050):
+def plot_year(yr = 2022):
     fig = px.scatter(
-            plot_data[(plot_data["year"] >= y1) & (plot_data["year"] <= y2)]
+            plot_data[(plot_data["year"] == yr)]
             , x = "Avoided CO₂ Emissions (MMTons)"
             , y = "value"
             , symbol = "building_class"
             , color = "end_use"
-            , facet_col = "year"
+            , facet_col = "adoption_scenario"
             , facet_row = "facet_row"
+            , title = "Calendar Year " + str(yr)
             , hover_data = {
                 "ecm": True,
                 "Avoided CO₂ Emissions (MMTons)": True,
@@ -72,13 +73,12 @@ def plot_year(y1 = 2022, y2 = 2050):
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     return(fig)
 
-y1 = 2022
-while (y1 <= max(plot_data["year"])):
-    plot_file = "./results/plots/cost_effective_avoided_co2_" + str(y1) +\
-            "_" + str(y1 + 3) + ".html"
+yr = 2022
+while (yr <= max(plot_data["year"])):
+    plot_file = "./results/plots/cost_effective_avoided_co2_" + str(yr) + ".html"
     print("Writing " + plot_file)
-    plot_year(y1 = y1, y2 = y1 + 3).write_html(plot_file)
-    y1 = y1 + 4
+    plot_year(yr = yr).write_html(plot_file)
+    yr = yr + 1
 
 
 
