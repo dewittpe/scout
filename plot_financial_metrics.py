@@ -16,7 +16,7 @@ fm.loc[fm["variable"] == "Cost of Conserved Energy ($/MMBtu saved)"
         , "facet_row"] =\
                 "Cost of Conserved Energy<br>($/MMBtu saved)"
 
-# aggregate data and generate the plot
+# aggregate data and generate an aggregate plot
 agg_fm = fm.groupby(["facet_row", "year"]).value.agg(["mean"])
 
 agg_fm.reset_index(inplace = True)
@@ -30,5 +30,17 @@ fig = px.line(agg_fm
 fig.update_yaxes(matches = None)
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 #fig.show()
-print("Writing './results/plots/aggregated_financial_metrics.html")
-fig.write_html("./results/plots/aggregated_financial_metrics.html")
+print( "Writing ./results/plots/financial_metrics/aggregated.html")
+fig.write_html("./results/plots/financial_metrics/aggregated.html")
+
+# create a plot for each of the ecms
+for ecm in set(list(fm["ecm"])):
+    fig = px.line(fm[fm["ecm"] == ecm]
+            , x = "year"
+            , y = "value"
+            , color = "ecm"
+            , facet_row = "facet_row")
+    fig.update_yaxes(matches = None)
+    fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+    print("Writing './results/plots/financial_metrics/" + ecm + ".html")
+    fig.write_html("./results/plots/financial_metrics/" + ecm + ".html")

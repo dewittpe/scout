@@ -2,8 +2,7 @@ plotting_datasets  = ./results/plots/financial_metrics.parquet
 plotting_datasets += ./results/plots/competed_market_savings.parquet
 plotting_datasets += ./results/plots/uncompeted_market_savings.parquet
 
-plots  = ./results/plots/aggregated_finacial_metrics.html
-plots += ./results/plots/finacial_metrics.html
+plots  = ./results/plots/.finacial_metrics
 plots += ./results/plots/.cost_effective_avoided_co2
 plots += ./results/plots/.total_avoided_co2
 plots += ./results/plots/.total_co2
@@ -25,10 +24,7 @@ all: $(plotting_datasets) $(plots)
 ./results/plots/uncompeted_market_savings.parquet : plot_uncompeted_market_savings_data_prep.py ./supporting_data/ecm_prep.json
 	python $<
 
-./results/plots/aggregated_finacial_metrics.html : plot_aggregated_financial_metrics.py ./results/plots/financial_metrics.parquet
-	python $<
-
-./results/plots/finacial_metrics.html : plot_financial_metrics.py ./results/plots/financial_metrics.parquet
+./results/plots/.finacial_metrics : plot_financial_metrics.py ./results/plots/financial_metrics.parquet
 	python $<
 
 ./results/plots/.cost_effective_avoided_co2 : plot_cost_effective_avoided_co2.py ./results/plots/financial_metrics.parquet ./results/plots/competed_market_savings.parquet
