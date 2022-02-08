@@ -1,5 +1,22 @@
+import sys
 import pandas as pd
 import plotly.express as px
+
+# Variable of Interest and paths
+arg = str(sys.argv[1])
+
+if arg == "carbon":
+    VOI = "CO\u2082 Emissions (MMTons)"
+    plot_path = "./results/plots/total_carbon/"
+elif arg == "cost":
+    VOI = "Cost (USD)"
+    plot_path = "./results/plots/total_cost/"
+elif arg == "energy":
+    VOI = "Energy Use (MMBtu)"
+    plot_path = "./results/plots/total_energy/"
+else:
+    print("unknown arg value")
+    exit(1)
 
 # aggregate
 def unique_strings(l):
@@ -17,7 +34,7 @@ ums.sort_values(by = ['ecm', 'year'], inplace = True)
 ms = cms.append(ums, sort = True)
 
 ms = ms[ms["results_scenario"].isin(["baseline", "efficient"])]
-ms = ms[ms["ecc"].isin(["carbon"])]
+ms = ms[ms["ecc"].isin([arg])]
 
 ms = ms.groupby(["adoption_scenario", "ecm", "competed", "results_scenario", "year"])\
         .agg({
@@ -38,7 +55,7 @@ for ecm in set(ms["ecm"]):
             facet_col = "adoption_scenario",
             labels = {
                 "year": "Year",
-                "value": "CO\u2082 Emissions (MMTons)",
+                "value": VOI,
                 "results_scenario": "Results Scenario",
                 "competed": "Competed"
                 },
@@ -52,21 +69,21 @@ for ecm in set(ms["ecm"]):
             )
     fig.update_traces(mode = "lines+markers")
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-    print("Writing: ./results/plots/total_co2/" + ecm + ".html")
-    fig.write_html("./results/plots/total_co2/" + ecm + ".html")
+    print("Writing: " + plot_path + ecm + ".html")
+    fig.write_html(plot_path + ecm + ".html")
 
 
 # create the java script needed for a dropdown list of the ecms
-with open('./results/plots/total_co2/each_ecm.js', 'w') as f:
-    f.write('var total_co2_ecm_select_list = document.createElement("select");\n')
-    f.write('var total_co2_ecms =' + "['--', '" + "', '".join(sorted(set(list(ms["ecm"])))) + "']\n")
-    f.write('total_co2_ecm_select_list.setAttribute("id", "total_co2_ecm_select");\n')
-    f.write('total_co2_ecm_select_list.setAttribute("onchange", "if (this.selectedIndex) get_total_co2_ecm();");\n')
-    f.write('document.getElementById("total_co2_ecms_div").appendChild(total_co2_ecm_select_list);\n')
-    f.write('for (var i = 0; i < total_co2_ecms.length; i++) {\n')
+with open(plot_path + 'each_ecm.js', 'w') as f:
+    f.write('var total_' + arg + '_ecm_select_list = document.createElement("select");\n')
+    f.write('var total_' + arg + '_ecms =' + "['--', '" + "', '".join(sorted(set(list(ms["ecm"])))) + "']\n")
+    f.write('total_' + arg + '_ecm_select_list.setAttribute("id", "total_' + arg + '_ecm_select");\n')
+    f.write('total_' + arg + '_ecm_select_list.setAttribute("onchange", "if (this.selectedIndex) get_total_' + arg + '_ecm();");\n')
+    f.write('document.getElementById("total_' + arg + '_ecms_div").appendChild(total_' + arg + '_ecm_select_list);\n')
+    f.write('for (var i = 0; i < total_' + arg + '_ecms.length; i++) {\n')
     f.write('\tvar option = document.createElement("option");\n')
-    f.write('\toption.setAttribute("value", total_co2_ecms[i]);\n')
-    f.write('\toption.text = total_co2_ecms[i];\n')
-    f.write('\ttotal_co2_ecm_select_list.appendChild(option);\n')
+    f.write('\toption.setAttribute("value", total_' + arg + '_ecms[i]);\n')
+    f.write('\toption.text = total_' + arg + '_ecms[i];\n')
+    f.write('\ttotal_' + arg + '_ecm_select_list.appendChild(option);\n')
     f.write('}')
 
