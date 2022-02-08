@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Change src value of iframe dynamically</title>
+    <script type="text/javascript">
+     function newSrc() {
+      var e = document.getElementById("MySelectMenu");
+      var newSrc = e.options[e.selectedIndex].value;
+      document.getElementById("MyDiv").data=newSrc;
+     }
+    </script>
+    <style type="text/css">
+      select {clear:both;}
+    </style>
+
+<style type='text/css'>
+    /* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+</style>
+
+
+
+  </head>
+
+  <body>
+    <h1> Scout Summary Graphics </h1>
+
+  <!-- Tab Links -->
+  <div class='tab'>
+    <button class="tablelinks" onclick="openGraphicsSet(event, 'Financial_Metrics')">Financial Metrics </button>
+    <button class="tablelinks" onclick="openGraphicsSet(event, 'Cost_Effective_Avoided_CO2')">Cost Effective Avoided CO<sub>2</sub> </button>
+  </div>
+
+  <!-- Tab Conent -->
+
+  <div id="Financial_Metrics" class="tabcontent">
+    <H2> Financial Metrics </H2>
+    <div>
+      <object type = "text/html" data = "financial_metrics.html" style="width:1600px;height:800px;"=></object>
+    </div>
+  </div>
+
+  <div id="Cost_Effective_Avoided_CO2" class="tabcontent">
+    <H2> Cost Effective Avoided CO<sub>2</sub> </H2>
+    <select id="MySelectMenu">
+     <option value="cost_effective_avoided_co2_2050.html">Show Calendar Year 2050</option>
+     <option value="cost_effective_avoided_co2_2049.html">Show Calendar Year 2049</option>
+     <option value="cost_effective_avoided_co2_2048.html">Show Calendar Year 2048</option>
+     <option value="cost_effective_avoided_co2_2047.html">Show Calendar Year 2047</option>
+     <option value="cost_effective_avoided_co2_2046.html">Show Calendar Year 2046</option>
+     <option value="cost_effective_avoided_co2_2045.html">Show Calendar Year 2045</option>
+     <option value="cost_effective_avoided_co2_2044.html">Show Calendar Year 2044</option>
+     <option value="cost_effective_avoided_co2_2043.html">Show Calendar Year 2043</option>
+     <option value="cost_effective_avoided_co2_2042.html">Show Calendar Year 2042</option>
+     <option value="cost_effective_avoided_co2_2041.html">Show Calendar Year 2041</option>
+     <option value="cost_effective_avoided_co2_2040.html">Show Calendar Year 2040</option>
+     <option value="cost_effective_avoided_co2_2039.html">Show Calendar Year 2039</option>
+     <option value="cost_effective_avoided_co2_2038.html">Show Calendar Year 2038</option>
+     <option value="cost_effective_avoided_co2_2037.html">Show Calendar Year 2037</option>
+     <option value="cost_effective_avoided_co2_2036.html">Show Calendar Year 2036</option>
+     <option value="cost_effective_avoided_co2_2035.html">Show Calendar Year 2035</option>
+     <option value="cost_effective_avoided_co2_2034.html">Show Calendar Year 2034</option>
+     <option value="cost_effective_avoided_co2_2033.html">Show Calendar Year 2033</option>
+     <option value="cost_effective_avoided_co2_2032.html">Show Calendar Year 2032</option>
+     <option value="cost_effective_avoided_co2_2031.html">Show Calendar Year 2031</option>
+     <option value="cost_effective_avoided_co2_2030.html">Show Calendar Year 2030</option>
+     <option value="cost_effective_avoided_co2_2029.html">Show Calendar Year 2029</option>
+     <option value="cost_effective_avoided_co2_2028.html">Show Calendar Year 2028</option>
+     <option value="cost_effective_avoided_co2_2027.html">Show Calendar Year 2027</option>
+     <option value="cost_effective_avoided_co2_2026.html">Show Calendar Year 2026</option>
+     <option value="cost_effective_avoided_co2_2025.html">Show Calendar Year 2025</option>
+     <option value="cost_effective_avoided_co2_2024.html">Show Calendar Year 2024</option>
+     <option value="cost_effective_avoided_co2_2023.html">Show Calendar Year 2023</option>
+     <option value="cost_effective_avoided_co2_2022.html">Show Calendar Year 2022</option>
+    </select>
+    <button onClick="newSrc();">Refresh</button>
+    <!--<iframe src="cost_effective_avoided_co2_2050.html" style="width:99%;height:800px;overflow:scroll;" id="MyFrame"></iframe> -->
+    <div>
+      <object type = "text/html" data="cost_effective_avoided_co2_2050.html" style="width:99%;height:800px;overflow:scroll;" id="MyDiv">
+      </object>
+    </div>
+  </div>
+
+<script type="text/javascript">
+function openGraphicsSet(evt, gset) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(gset).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+
+  </body>
+
+</html>
