@@ -53,5 +53,5 @@ for ecm in set(list(fm["ecm"])):
             , facet_row = "facet_row")
     fig.update_yaxes(matches = None)
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-    print("Writing './results/plots/financial_metrics/" + ecm + ".html")
-    fig.write_html("./results/plots/financial_metrics/" + ecm + ".html")
+    print("Writing './results/plots/financial_metrics/each_ecm/" + ecm + ".html")
+    fig.write_html("./results/plots/financial_metrics/each_ecm/" + ecm + ".html")

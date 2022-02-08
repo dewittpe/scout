@@ -34,7 +34,7 @@ all: $(plots)
 # Plotting Recipes
 
 ./results/plots/.financial_metrics : plot_financial_metrics.py ./results/plots/financial_metrics.parquet
-	mkdir -p ./results/plots/financial_metrics
+	mkdir -p ./results/plots/financial_metrics/each_ecm
 	python $<
 	@touch $@
 
