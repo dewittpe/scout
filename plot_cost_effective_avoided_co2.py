@@ -75,7 +75,7 @@ def plot_year(yr = 2022):
 
 yr = 2022
 while (yr <= max(plot_data["year"])):
-    plot_file = "./results/plots/cost_effective_avoided_co2_" + str(yr) + ".html"
+    plot_file = "./results/plots/cost_effective_avoided_co2/" + str(yr) + ".html"
     print("Writing " + plot_file)
     plot_year(yr = yr).write_html(plot_file)
     yr = yr + 1

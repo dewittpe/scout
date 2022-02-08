@@ -5,10 +5,10 @@
     <title>Scout Graphics</title>
 
     <script type="text/javascript">
-      function newSrc() {
-              var e = document.getElementById("MySelectMenu");
+      function get_cost_effective_avoided_co2() {
+              var e = document.getElementById("cost_effective_avoided_co2_select");
               var newSrc = e.options[e.selectedIndex].value;
-              document.getElementById("MyDiv").data=newSrc;
+              document.getElementById("cost_effective_avoided_co2_div").data=newSrc;
             }
 
       function get_fm_ecm() {
@@ -137,41 +137,40 @@
   </div>
 
   <div id="Cost_Effective_Avoided_CO2" class="tabcontent">
-    <H2> Cost Effective Avoided CO<sub>2</sub> </H2>
-    <select id="MySelectMenu">
-     <option value="cost_effective_avoided_co2_2050.html">Show Calendar Year 2050</option>
-     <option value="cost_effective_avoided_co2_2049.html">Show Calendar Year 2049</option>
-     <option value="cost_effective_avoided_co2_2048.html">Show Calendar Year 2048</option>
-     <option value="cost_effective_avoided_co2_2047.html">Show Calendar Year 2047</option>
-     <option value="cost_effective_avoided_co2_2046.html">Show Calendar Year 2046</option>
-     <option value="cost_effective_avoided_co2_2045.html">Show Calendar Year 2045</option>
-     <option value="cost_effective_avoided_co2_2044.html">Show Calendar Year 2044</option>
-     <option value="cost_effective_avoided_co2_2043.html">Show Calendar Year 2043</option>
-     <option value="cost_effective_avoided_co2_2042.html">Show Calendar Year 2042</option>
-     <option value="cost_effective_avoided_co2_2041.html">Show Calendar Year 2041</option>
-     <option value="cost_effective_avoided_co2_2040.html">Show Calendar Year 2040</option>
-     <option value="cost_effective_avoided_co2_2039.html">Show Calendar Year 2039</option>
-     <option value="cost_effective_avoided_co2_2038.html">Show Calendar Year 2038</option>
-     <option value="cost_effective_avoided_co2_2037.html">Show Calendar Year 2037</option>
-     <option value="cost_effective_avoided_co2_2036.html">Show Calendar Year 2036</option>
-     <option value="cost_effective_avoided_co2_2035.html">Show Calendar Year 2035</option>
-     <option value="cost_effective_avoided_co2_2034.html">Show Calendar Year 2034</option>
-     <option value="cost_effective_avoided_co2_2033.html">Show Calendar Year 2033</option>
-     <option value="cost_effective_avoided_co2_2032.html">Show Calendar Year 2032</option>
-     <option value="cost_effective_avoided_co2_2031.html">Show Calendar Year 2031</option>
-     <option value="cost_effective_avoided_co2_2030.html">Show Calendar Year 2030</option>
-     <option value="cost_effective_avoided_co2_2029.html">Show Calendar Year 2029</option>
-     <option value="cost_effective_avoided_co2_2028.html">Show Calendar Year 2028</option>
-     <option value="cost_effective_avoided_co2_2027.html">Show Calendar Year 2027</option>
-     <option value="cost_effective_avoided_co2_2026.html">Show Calendar Year 2026</option>
-     <option value="cost_effective_avoided_co2_2025.html">Show Calendar Year 2025</option>
-     <option value="cost_effective_avoided_co2_2024.html">Show Calendar Year 2024</option>
-     <option value="cost_effective_avoided_co2_2023.html">Show Calendar Year 2023</option>
-     <option value="cost_effective_avoided_co2_2022.html">Show Calendar Year 2022</option>
+    <p> Select Year </p>
+    <select id="cost_effective_avoided_co2_select" onchange="if (this.selectedIndex) get_cost_effective_avoided_co2()">
+     <option value="./cost_effective_avoided_co2/2050.html">2050</option>
+     <option value="./cost_effective_avoided_co2/2049.html">2049</option>
+     <option value="./cost_effective_avoided_co2/2048.html">2048</option>
+     <option value="./cost_effective_avoided_co2/2047.html">2047</option>
+     <option value="./cost_effective_avoided_co2/2046.html">2046</option>
+     <option value="./cost_effective_avoided_co2/2045.html">2045</option>
+     <option value="./cost_effective_avoided_co2/2044.html">2044</option>
+     <option value="./cost_effective_avoided_co2/2043.html">2043</option>
+     <option value="./cost_effective_avoided_co2/2042.html">2042</option>
+     <option value="./cost_effective_avoided_co2/2041.html">2041</option>
+     <option value="./cost_effective_avoided_co2/2040.html">2040</option>
+     <option value="./cost_effective_avoided_co2/2039.html">2039</option>
+     <option value="./cost_effective_avoided_co2/2038.html">2038</option>
+     <option value="./cost_effective_avoided_co2/2037.html">2037</option>
+     <option value="./cost_effective_avoided_co2/2036.html">2036</option>
+     <option value="./cost_effective_avoided_co2/2035.html">2035</option>
+     <option value="./cost_effective_avoided_co2/2034.html">2034</option>
+     <option value="./cost_effective_avoided_co2/2033.html">2033</option>
+     <option value="./cost_effective_avoided_co2/2032.html">2032</option>
+     <option value="./cost_effective_avoided_co2/2031.html">2031</option>
+     <option value="./cost_effective_avoided_co2/2030.html">2030</option>
+     <option value="./cost_effective_avoided_co2/2029.html">2029</option>
+     <option value="./cost_effective_avoided_co2/2028.html">2028</option>
+     <option value="./cost_effective_avoided_co2/2027.html">2027</option>
+     <option value="./cost_effective_avoided_co2/2026.html">2026</option>
+     <option value="./cost_effective_avoided_co2/2025.html">2025</option>
+     <option value="./cost_effective_avoided_co2/2024.html">2024</option>
+     <option value="./cost_effective_avoided_co2/2023.html">2023</option>
+     <option value="./cost_effective_avoided_co2/2022.html">2022</option>
     </select>
-    <button onClick="newSrc();">Refresh</button>
     <div>
-      <object type = "text/html" data="cost_effective_avoided_co2_2050.html" style="width:99%;height:800px;overflow:scroll;" id="MyDiv">
+      <object type = "text/html" data="./cost_effective_avoided_co2/2050.html" style="width:99%;height:800px;overflow:scroll;" id="cost_effective_avoided_co2_div">
       </object>
     </div>
   </div>
