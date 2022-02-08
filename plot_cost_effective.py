@@ -8,10 +8,10 @@ arg = str(sys.argv[1])
 if arg == "carbon":
     VOI = "Avoided CO\u2082 Emissions (MMTons)"
     plot_path = "./results/plots/cost_effective_carbon_savings/"
-elif arg == "operation_cost_savings":
+elif arg == "cost":
     VOI = "Energy Cost Savings (USD)"
     plot_path = "./results/plots/cost_effective_operation_cost_savings/"
-elif arg == "energy_savings":
+elif arg == "energy":
     VOI = "Energy Savings (MMBtu)"
     plot_path = "./results/plots/cost_effective_energy_savings/"
 else:

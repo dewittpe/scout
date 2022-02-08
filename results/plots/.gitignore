@@ -1,10 +1,14 @@
 *.html
 *.parquet
 *.js
-.cost_effective_avoided_co2
+.financial_metrics
+.cost_effective_carbon_savings
 .cost_effective_operation_cost_savings
 .cost_effective_energy_savings
-.financial_metrics
-.total_avoided_co2
-.total_co2
+.total_carbon
+.total_cost
+.total_energy
+.total_carbon_savings
+.total_cost_savings
+.total_energy_savings
 

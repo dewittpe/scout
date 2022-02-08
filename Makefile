@@ -9,7 +9,9 @@ plots += ./results/plots/.cost_effective_energy_savings
 plots += ./results/plots/.total_carbon_savings
 plots += ./results/plots/.total_cost_savings
 plots += ./results/plots/.total_energy_savings
-plots += ./results/plots/.total_co2
+plots += ./results/plots/.total_carbon
+plots += ./results/plots/.total_cost
+plots += ./results/plots/.total_energy
 
 all: $(plots)
 
@@ -49,12 +51,12 @@ all: $(plots)
 
 ./results/plots/.cost_effective_operation_cost_savings : plot_cost_effective.py ./results/plots/financial_metrics.parquet ./results/plots/competed_market_savings.parquet
 	mkdir -p ./results/plots/cost_effective_operation_cost_savings
-	python $< operation_cost_savings
+	python $< cost
 	@touch $@
 
 ./results/plots/.cost_effective_energy_savings : plot_cost_effective.py ./results/plots/financial_metrics.parquet ./results/plots/competed_market_savings.parquet
 	mkdir -p ./results/plots/cost_effective_energy_savings
-	python $< energy_savings
+	python $< energy
 	@touch $@
 
 ./results/plots/.total_carbon_savings : plot_total_savings.py ./results/plots/competed_market_savings.parquet
@@ -72,10 +74,21 @@ all: $(plots)
 	python $< cost
 	@touch $@
 
-./results/plots/.total_co2 : plot_total_co2.py ./results/plots/competed_market_savings.parquet ./results/plots/uncompeted_market_savings.parquet
-	mkdir -p ./results/plots/total_co2
-	python $<
+./results/plots/.total_carbon : plot_total.py ./results/plots/competed_market_savings.parquet ./results/plots/uncompeted_market_savings.parquet
+	mkdir -p ./results/plots/total_carbon
+	python $< carbon
 	@touch $@
+
+./results/plots/.total_cost : plot_total.py ./results/plots/competed_market_savings.parquet ./results/plots/uncompeted_market_savings.parquet
+	mkdir -p ./results/plots/total_cost
+	python $< cost
+	@touch $@
+
+./results/plots/.total_energy : plot_total.py ./results/plots/competed_market_savings.parquet ./results/plots/uncompeted_market_savings.parquet
+	mkdir -p ./results/plots/total_energy
+	python $< energy
+	@touch $@
+
 
 ################################################################################
 clean:
