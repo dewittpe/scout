@@ -52,13 +52,7 @@ for ecm in set(ms["ecm"]):
             )
     fig.update_traces(mode = "lines+markers")
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-
-fig.show()
-
-
-
-ms[ms["ecm"] == ecm]
-
-
-
+    fm = ecm.replace(" ", "_")
+    print("Writing: ./results/plots/total_co2_" + fm + ".html")
+    fig.write_html("./results/plots/total_co2_" + fm + ".html")
 
