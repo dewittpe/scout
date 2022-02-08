@@ -1,15 +1,31 @@
+import sys
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
+# Variable of Interest and paths
+arg = str(sys.argv[1])
+
+if arg == "carbon":
+    VOI = "Avoided CO\u2082 Emissions (MMTons)"
+    plot_path = "./results/plots/total_carbon_savings/"
+elif arg == "operation_cost_savings":
+    VOI = "Energy Cost Savings (USD)"
+    plot_path = "./results/plots/total_cost_savings/"
+elif arg == "energy_savings":
+    VOI = "Energy Savings (MMBtu)"
+    plot_path = "./results/plots/total_energy_savings/"
+else:
+    print("unknown arg value")
+    exit(1)
+
 # read in data
 cms = pd.read_parquet("./results/plots/competed_market_savings.parquet")
 cms.sort_values(by = ['ecm', 'variable', 'year'], inplace = True)
 
-# subset to avoided CO2
-cms = cms[cms["variable"] == "Avoided CO\u2082 Emissions (MMTons)"]
-
+# subset
+cms = cms[cms["variable"] == VOI]
 
 # get total for each year and cummulative
 total = \
@@ -65,9 +81,10 @@ fig = px.scatter(
         color = "region",
         facet_col = "adoption_scenario")
 fig.update_traces(mode = "lines+markers")
+fig.update_yaxes(exponentformat = "e", title = VOI)
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-print("Writing  ./results/plots/total_avoided_co2/by_region.html")
-fig.write_html("./results/plots/total_avoided_co2/by_region.html")
+print("Writing " + plot_path + "by_region.html")
+fig.write_html(plot_path + "by_region.html")
 
 fig = px.scatter(
         cms_by_building_class,
@@ -76,9 +93,10 @@ fig = px.scatter(
         color = "building_class",
         facet_col = "adoption_scenario")
 fig.update_traces(mode = "lines+markers")
+fig.update_yaxes(exponentformat = "e", title = VOI)
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-print("Writing  ./results/plots/total_avoided_co2/by_building_class.html")
-fig.write_html("./results/plots/total_avoided_co2/by_building_class.html")
+print("Writing " + plot_path + "by_building_class.html")
+fig.write_html(plot_path + "by_building_class.html")
 
 fig = px.scatter(
         cms_by_end_use,
@@ -87,8 +105,9 @@ fig = px.scatter(
         color = "end_use",
         facet_col = "adoption_scenario")
 fig.update_traces(mode = "lines+markers")
+fig.update_yaxes(exponentformat = "e", title = VOI)
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-print("Writing  ./results/plots/total_avoided_co2/by_end_use.html")
-fig.write_html("./results/plots/total_avoided_co2/by_end_use.html")
+print("Writing " + plot_path + "by_end_use.html")
+fig.write_html(plot_path + "by_end_use.html")
 
 
