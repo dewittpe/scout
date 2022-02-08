@@ -66,8 +66,8 @@ fig = px.scatter(
         facet_col = "adoption_scenario")
 fig.update_traces(mode = "lines+markers")
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-print("Writing  ./results/plots/total_avoided_co2_by_region.html")
-fig.write_html("./results/plots/total_avoided_co2_by_region.html")
+print("Writing  ./results/plots/total_avoided_co2/by_region.html")
+fig.write_html("./results/plots/total_avoided_co2/by_region.html")
 
 fig = px.scatter(
         cms_by_building_class,
@@ -77,8 +77,8 @@ fig = px.scatter(
         facet_col = "adoption_scenario")
 fig.update_traces(mode = "lines+markers")
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-print("Writing  ./results/plots/total_avoided_co2_by_building_class.html")
-fig.write_html("./results/plots/total_avoided_co2_by_building_class.html")
+print("Writing  ./results/plots/total_avoided_co2/by_building_class.html")
+fig.write_html("./results/plots/total_avoided_co2/by_building_class.html")
 
 fig = px.scatter(
         cms_by_end_use,
@@ -88,7 +88,7 @@ fig = px.scatter(
         facet_col = "adoption_scenario")
 fig.update_traces(mode = "lines+markers")
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
-print("Writing  ./results/plots/total_avoided_co2_by_end_use.html")
-fig.write_html("./results/plots/total_avoided_co2_by_end_use.html")
+print("Writing  ./results/plots/total_avoided_co2/by_end_use.html")
+fig.write_html("./results/plots/total_avoided_co2/by_end_use.html")
 
 

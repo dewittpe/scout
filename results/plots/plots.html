@@ -140,6 +140,7 @@
   <div class='tab'>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Financial_Metrics')">Financial Metrics </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Avoided_CO2')">Cost Effective Avoided CO<sub>2</sub> </button>
+    <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Avoided_CO2')">Total Avoided CO<sub>2</sub> </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_CO2')">Total CO<sub>2</sub> </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Operation_Cost_Savings')">Cost Effective Operation Cost Savings </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Cost')">Total Cost </button>
@@ -207,6 +208,12 @@
       <object type = "text/html" data="./cost_effective_avoided_co2/2050.html" style="width:99%;height:800px;overflow:scroll;" id="cost_effective_avoided_co2_div">
       </object>
     </div>
+  </div>
+
+  <div id="Total_Avoided_CO2" class="tabcontent">
+    <object type = "text/html" data="./total_avoided_co2/by_region.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    <object type = "text/html" data="./total_avoided_co2/by_building_class.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    <object type = "text/html" data="./total_avoided_co2/by_end_use.html" style="width:99%;height:800px;overflow:scroll;"> </object>
   </div>
 
   <div id="Total_CO2" class="tabcontent">
