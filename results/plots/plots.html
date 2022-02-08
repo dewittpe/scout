@@ -211,9 +211,32 @@
   </div>
 
   <div id="Total_Avoided_CO2" class="tabcontent">
-    <object type = "text/html" data="./total_avoided_co2/by_region.html" style="width:99%;height:800px;overflow:scroll;"> </object>
-    <object type = "text/html" data="./total_avoided_co2/by_building_class.html" style="width:99%;height:800px;overflow:scroll;"> </object>
-    <object type = "text/html" data="./total_avoided_co2/by_end_use.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+
+    <p>Select plot by region, building class, or end use.  Each plot will have
+    a cumulative total line which, due to scale, will make the other traces
+    difficult to see.  Double click on the "cumulative total" in the legend of
+    the plotly object to turn off that trace and the y-axis will auto-rescale
+    making it easier to view the other traces.
+    </p>
+
+    <div class = 'subtab'>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_avoided_co2_by_region')">By Region</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_avoided_co2_by_building_class')">By Building Class</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_avoided_co2_by_end_use')">By End Use</button>
+    </div>
+
+    <div id='total_avoided_co2_by_region' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_avoided_co2/by_region.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id='total_avoided_co2_by_building_class' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_avoided_co2/by_building_class.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id='total_avoided_co2_by_end_use' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_avoided_co2/by_end_use.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
   </div>
 
   <div id="Total_CO2" class="tabcontent">
