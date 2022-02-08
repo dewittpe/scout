@@ -35,6 +35,18 @@
               document.getElementById("total_carbon_ecm_plot").data = new_data;
             }
 
+      function get_total_cost_ecm() {
+              var e = document.getElementById("total_cost_ecm_select");
+              var new_data = "./total_cost/" + e.options[e.selectedIndex].value + ".html";
+              document.getElementById("total_cost_ecm_plot").data = new_data;
+            }
+
+      function get_total_energy_ecm() {
+              var e = document.getElementById("total_energy_ecm_select");
+              var new_data = "./total_energy/" + e.options[e.selectedIndex].value + ".html";
+              document.getElementById("total_energy_ecm_plot").data = new_data;
+            }
+
       function openGraphicsSet(evt, gset) {
         // Declare all variables
         var i, tabcontent, tablinks;
@@ -157,13 +169,18 @@
   <!-- Tab Links -->
   <div class='tab'>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Financial_Metrics')">Financial Metrics </button>
+
     <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Carbon_Savings')">Cost Effective CO<sub>2</sub> Savings </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Carbon_Savings')">Total CO<sub>2</sub> Savings </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Carbon_Emission')">Total CO<sub>2</sub> Emissions </button>
+
     <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Operation_Cost_Savings')">Cost Effective Operation Cost Savings </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Cost_Savings')">Total Cost Savings</button>
+    <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Cost')">Total Cost </button>
+
     <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Energy_Savings')">Cost Effective Energy Savings </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Energy_Savings')">Total Energy Savings</button>
+    <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Energy')">Total Energy </button>
   </div>
 
   <!-- Tab Content -->
@@ -303,7 +320,12 @@
   </div>
 
   <div id="Total_Cost_Savings" class="tabcontent">
-    Total Cost-- Under development
+    under dev
+  </div>
+
+  <div id="Total_Cost" class="tabcontent">
+      <p> Select an ECM to plot <div id="total_cost_ecms_div"></div> </p>
+      <object id = 'total_cost_ecm_plot' type = "text/html" style="width:1600px;height:800px;"></object>
   </div>
 
   <div id="Cost_Effective_Energy_Savings" class="tabcontent">
@@ -347,7 +369,12 @@
   </div>
 
   <div id="Total_Energy_Savings" class="tabcontent">
-    Total Energy -- Under development
+    under dev
+  </div>
+
+  <div id="Total_Energy" class="tabcontent">
+      <p> Select an ECM to plot <div id="total_energy_ecms_div"></div> </p>
+      <object id = 'total_energy_ecm_plot' type = "text/html" style="width:1600px;height:800px;"></object>
   </div>
 
   </body>
@@ -355,5 +382,7 @@
 
   <script src="./financial_metrics/each_ecm.js"> </script>
   <script src="./total_carbon/each_ecm.js"> </script>
+  <script src="./total_cost/each_ecm.js"> </script>
+  <script src="./total_energy/each_ecm.js"> </script>
 
 </html>
