@@ -33,12 +33,23 @@ fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 print( "Writing ./results/plots/financial_metrics/aggregated.html")
 fig.write_html("./results/plots/financial_metrics/aggregated.html")
 
+# plot showing _all_ ecms
+fig = px.line(fm
+        , x = "year"
+        , y = "value"
+        , color = "ecm"
+        , facet_row = "facet_row")
+fig.update_yaxes(matches = None)
+fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+print("Writing './results/plots/financial_metrics/all_ecms.html")
+fig.write_html("./results/plots/financial_metrics/all_ecms.html")
+
 # create a plot for each of the ecms
 for ecm in set(list(fm["ecm"])):
     fig = px.line(fm[fm["ecm"] == ecm]
             , x = "year"
             , y = "value"
-            , color = "ecm"
+            , title = ecm
             , facet_row = "facet_row")
     fig.update_yaxes(matches = None)
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
