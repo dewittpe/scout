@@ -17,6 +17,12 @@
               document.getElementById("cost_effective_operation_cost_savings_div").data=newSrc;
             }
 
+      function get_cost_effective_energy_savings() {
+              var e = document.getElementById("cost_effective_energy_savings_select");
+              var newSrc = e.options[e.selectedIndex].value;
+              document.getElementById("cost_effective_energy_savings_div").data=newSrc;
+            }
+
       function get_fm_ecm() {
               var e = document.getElementById("all_fm_ecm_select");
               var new_data = "./financial_metrics/each_ecm/" + e.options[e.selectedIndex].value + ".html";
@@ -301,7 +307,43 @@
   </div>
 
   <div id="Cost_Effective_Energy_Savings" class="tabcontent">
-    Cost Effective Energy Savings -- Under development
+    <p> Select Year </p>
+    <select id="cost_effective_energy_savings_select" onchange="if (this.selectedIndex) get_cost_effective_energy_savings()">
+      <option >--</option>
+      <option value="./cost_effective_energy_savings/2050.html">2050</option>
+      <option value="./cost_effective_energy_savings/2049.html">2049</option>
+      <option value="./cost_effective_energy_savings/2048.html">2048</option>
+      <option value="./cost_effective_energy_savings/2047.html">2047</option>
+      <option value="./cost_effective_energy_savings/2046.html">2046</option>
+      <option value="./cost_effective_energy_savings/2045.html">2045</option>
+      <option value="./cost_effective_energy_savings/2044.html">2044</option>
+      <option value="./cost_effective_energy_savings/2043.html">2043</option>
+      <option value="./cost_effective_energy_savings/2042.html">2042</option>
+      <option value="./cost_effective_energy_savings/2041.html">2041</option>
+      <option value="./cost_effective_energy_savings/2040.html">2040</option>
+      <option value="./cost_effective_energy_savings/2039.html">2039</option>
+      <option value="./cost_effective_energy_savings/2038.html">2038</option>
+      <option value="./cost_effective_energy_savings/2037.html">2037</option>
+      <option value="./cost_effective_energy_savings/2036.html">2036</option>
+      <option value="./cost_effective_energy_savings/2035.html">2035</option>
+      <option value="./cost_effective_energy_savings/2034.html">2034</option>
+      <option value="./cost_effective_energy_savings/2033.html">2033</option>
+      <option value="./cost_effective_energy_savings/2032.html">2032</option>
+      <option value="./cost_effective_energy_savings/2031.html">2031</option>
+      <option value="./cost_effective_energy_savings/2030.html">2030</option>
+      <option value="./cost_effective_energy_savings/2029.html">2029</option>
+      <option value="./cost_effective_energy_savings/2028.html">2028</option>
+      <option value="./cost_effective_energy_savings/2027.html">2027</option>
+      <option value="./cost_effective_energy_savings/2026.html">2026</option>
+      <option value="./cost_effective_energy_savings/2025.html">2025</option>
+      <option value="./cost_effective_energy_savings/2024.html">2024</option>
+      <option value="./cost_effective_energy_savings/2023.html">2023</option>
+      <option value="./cost_effective_energy_savings/2022.html">2022</option>
+    </select>
+    <div>
+      <object type = "text/html" style="width:99%;height:800px;overflow:scroll;" id="cost_effective_energy_savings_div">
+      </object>
+    </div>
   </div>
 
   <div id="Total_Energy" class="tabcontent">
