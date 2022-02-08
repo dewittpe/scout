@@ -1,2 +1,6 @@
 *.html
 *.parquet
+.cost_effective_avoided_co2
+.total_avoided_co2
+.total_co2
+
