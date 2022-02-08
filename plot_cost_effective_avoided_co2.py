@@ -69,7 +69,7 @@ def plot_year(yr = 2022):
                 "building_class": True
                 }
             )
-    fig.update_yaxes(matches = None)
+    fig.update_yaxes(matches = None, exponentformat = "e")
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     return(fig)
 
