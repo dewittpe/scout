@@ -46,4 +46,5 @@ clean:
 	/bin/rm -f ./results/ecm_results.json
 	/bin/rm -f ./supporting_data/ecm_prep.json
 	/bin/rm -f /results/plots/*.parquet
-	/bin/rm -f /results/plots/*.html
+	/bin/rm -f $(plotting_datasets)
+	/bin/rm -f $(plots)
