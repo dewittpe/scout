@@ -11,6 +11,12 @@
               document.getElementById("MyDiv").data=newSrc;
             }
 
+      function get_fm_ecm() {
+              var e = document.getElementById("all_fm_ecm_select");
+              var new_data = "./financial_metrics/each_ecm/" + e.options[e.selectedIndex].value + ".html";
+              document.getElementById("fm_ecm_plot").data = new_data;
+            }
+
       function openGraphicsSet(evt, gset) {
         // Declare all variables
         var i, tabcontent, tablinks;
@@ -52,6 +58,7 @@
         document.getElementById(gset).style.display = "block";
         evt.currentTarget.className += " active";
       }
+
 
     </script>
 
@@ -99,6 +106,7 @@
   <body>
     <h1> Scout Summary Graphics </h1>
 
+
   <!-- Tab Links -->
   <div class='tab'>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Financial_Metrics')">Financial Metrics </button>
@@ -114,15 +122,17 @@
       <button class="subtablinks" onclick="openSubGraphicsSet(event, 'fm_by_ecm')">Each ECM </button>
     </div>
     <div id='fm_aggregated' class="subtabcontent">
+      <p> Aggregated (mean) value for the financial metric over all the ECMs by year. </p>
       <object type = "text/html" data = "./financial_metrics/aggregated.html" style="width:1600px;height:800px;"></object>
     </div>
     <div id='fm_all_ecm' class="subtabcontent">
+      <p> All ECMs.  You can select/deselect ECMs from the plotly menu </p>
       <object type = "text/html" data = "./financial_metrics/all_ecms.html" style="width:1600px;height:800px;"></object>
     </div>
     <div id='fm_by_ecm' class="subtabcontent">
-      <h2> Select and ECM </h2>
+      <p> Select an ECM to plot <div id="all_fm_ecms_div"></div> </p>
 
-      <object type = "text/html" data = "./financial_metrics/Best Com. Air Sealing (Exist).html" style="width:1600px;height:800px;"></object>
+      <object id = 'fm_ecm_plot' type = "text/html" data = "./financial_metrics/each_ecm/Best Com. Air Sealing (Exist).html" style="width:1600px;height:800px;"></object>
     </div>
   </div>
 
@@ -166,4 +176,8 @@
     </div>
   </div>
   </body>
+
+
+  <script src="./financial_metrics/each_ecm.js">
+  </script>
 </html>

@@ -26,6 +26,7 @@ agg_fm
 fig = px.line(agg_fm
         , x = "year"
         , y = "mean"
+        , title = "Aggregated"
         , facet_row = "facet_row")
 fig.update_yaxes(matches = None)
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
@@ -55,3 +56,18 @@ for ecm in set(list(fm["ecm"])):
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     print("Writing './results/plots/financial_metrics/each_ecm/" + ecm + ".html")
     fig.write_html("./results/plots/financial_metrics/each_ecm/" + ecm + ".html")
+
+# create the java script needed for a dropdown list of the ecms
+with open('./results/plots/financial_metrics/each_ecm.js', 'w') as f:
+    f.write('var all_fm_ecm_select_list = document.createElement("select");\n')
+    f.write('var all_fm_ecms =' + "['" + "', '".join(sorted(set(list(fm["ecm"])))) + "']\n")
+    f.write('all_fm_ecm_select_list.setAttribute("id", "all_fm_ecm_select");\n')
+    f.write('all_fm_ecm_select_list.setAttribute("onchange", "if (this.selectedIndex) get_fm_ecm();");\n')
+    f.write('document.getElementById("all_fm_ecms_div").appendChild(all_fm_ecm_select_list);\n')
+    f.write('for (var i = 0; i < all_fm_ecms.length; i++) {\n')
+    f.write('\tvar option = document.createElement("option");\n')
+    f.write('\toption.setAttribute("value", all_fm_ecms[i]);\n')
+    f.write('\toption.text = all_fm_ecms[i];\n')
+    f.write('\tall_fm_ecm_select_list.appendChild(option);\n')
+    f.write('}')
+
