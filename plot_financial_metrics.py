@@ -60,7 +60,7 @@ for ecm in set(list(fm["ecm"])):
 # create the java script needed for a dropdown list of the ecms
 with open('./results/plots/financial_metrics/each_ecm.js', 'w') as f:
     f.write('var all_fm_ecm_select_list = document.createElement("select");\n')
-    f.write('var all_fm_ecms =' + "['" + "', '".join(sorted(set(list(fm["ecm"])))) + "']\n")
+    f.write('var all_fm_ecms =' + "['--', '" + "', '".join(sorted(set(list(fm["ecm"])))) + "']\n")
     f.write('all_fm_ecm_select_list.setAttribute("id", "all_fm_ecm_select");\n')
     f.write('all_fm_ecm_select_list.setAttribute("onchange", "if (this.selectedIndex) get_fm_ecm();");\n')
     f.write('document.getElementById("all_fm_ecms_div").appendChild(all_fm_ecm_select_list);\n')
