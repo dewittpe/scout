@@ -28,7 +28,7 @@ fig = px.line(agg_fm
         , y = "mean"
         , title = "Aggregated"
         , facet_row = "facet_row")
-fig.update_yaxes(matches = None)
+fig.update_yaxes(matches = None, exponentformat = "e")
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 #fig.show()
 print( "Writing ./results/plots/financial_metrics/aggregated.html")
@@ -40,7 +40,7 @@ fig = px.line(fm
         , y = "value"
         , color = "ecm"
         , facet_row = "facet_row")
-fig.update_yaxes(matches = None)
+fig.update_yaxes(matches = None, exponentformat = "e")
 fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 print("Writing './results/plots/financial_metrics/all_ecms.html")
 fig.write_html("./results/plots/financial_metrics/all_ecms.html")
@@ -52,7 +52,7 @@ for ecm in set(list(fm["ecm"])):
             , y = "value"
             , title = ecm
             , facet_row = "facet_row")
-    fig.update_yaxes(matches = None)
+    fig.update_yaxes(matches = None, exponentformat = "e")
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     print("Writing './results/plots/financial_metrics/each_ecm/" + ecm + ".html")
     fig.write_html("./results/plots/financial_metrics/each_ecm/" + ecm + ".html")
