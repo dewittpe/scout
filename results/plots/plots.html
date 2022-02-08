@@ -11,6 +11,48 @@
               document.getElementById("MyDiv").data=newSrc;
             }
 
+      function openGraphicsSet(evt, gset) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(gset).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+
+      function openSubGraphicsSet(evt, gset) {
+        // Declare all variables
+        var i, subtabcontent, subtablinks;
+
+        // Get all elements with class="subtabcontent" and hide them
+        subtabcontent = document.getElementsByClassName("subtabcontent");
+        for (i = 0; i < subtabcontent.length; i++) {
+          subtabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="subtablinks" and remove the class "active"
+        subtablinks = document.getElementsByClassName("subtablinks");
+        for (i = 0; i < subtablinks.length; i++) {
+          subtablinks[i].className = subtablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current subtab, and add an "active" class to the button that opened the subtab
+        document.getElementById(gset).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+
     </script>
 
     <style type="text/css">
@@ -59,16 +101,28 @@
 
   <!-- Tab Links -->
   <div class='tab'>
-    <button class="tablelinks" onclick="openGraphicsSet(event, 'Financial_Metrics')">Financial Metrics </button>
-    <button class="tablelinks" onclick="openGraphicsSet(event, 'Cost_Effective_Avoided_CO2')">Cost Effective Avoided CO<sub>2</sub> </button>
+    <button class="tablinks" onclick="openGraphicsSet(event, 'Financial_Metrics')">Financial Metrics </button>
+    <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Avoided_CO2')">Cost Effective Avoided CO<sub>2</sub> </button>
   </div>
 
   <!-- Tab Conent -->
 
   <div id="Financial_Metrics" class="tabcontent">
-    <H2> Financial Metrics </H2>
-    <div>
-      <object type = "text/html" data = "financial_metrics.html" style="width:1600px;height:800px;"=></object>
+    <div class='subtab'>
+      <button class="subtablinks" onclick="openSubGraphicsSet(event, 'fm_aggregated')">Aggregated</button>
+      <button class="subtablinks" onclick="openSubGraphicsSet(event, 'fm_all_ecm')">All ECMs </button>
+      <button class="subtablinks" onclick="openSubGraphicsSet(event, 'fm_by_ecm')">Each ECM </button>
+    </div>
+    <div id='fm_aggregated' class="subtabcontent">
+      <object type = "text/html" data = "./financial_metrics/aggregated.html" style="width:1600px;height:800px;"></object>
+    </div>
+    <div id='fm_all_ecm' class="subtabcontent">
+      <object type = "text/html" data = "./financial_metrics/all_ecms.html" style="width:1600px;height:800px;"></object>
+    </div>
+    <div id='fm_by_ecm' class="subtabcontent">
+      <h2> Select and ECM </h2>
+
+      <object type = "text/html" data = "./financial_metrics/Best Com. Air Sealing (Exist).html" style="width:1600px;height:800px;"></object>
     </div>
   </div>
 
@@ -106,36 +160,10 @@
      <option value="cost_effective_avoided_co2_2022.html">Show Calendar Year 2022</option>
     </select>
     <button onClick="newSrc();">Refresh</button>
-    <!--<iframe src="cost_effective_avoided_co2_2050.html" style="width:99%;height:800px;overflow:scroll;" id="MyFrame"></iframe> -->
     <div>
       <object type = "text/html" data="cost_effective_avoided_co2_2050.html" style="width:99%;height:800px;overflow:scroll;" id="MyDiv">
       </object>
     </div>
   </div>
-
-<script type="text/javascript">
-function openGraphicsSet(evt, gset) {
-  // Declare all variables
-  var i, tabcontent, tablinks;
-
-  // Get all elements with class="tabcontent" and hide them
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-
-  // Get all elements with class="tablinks" and remove the class "active"
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-
-  // Show the current tab, and add an "active" class to the button that opened the tab
-  document.getElementById(gset).style.display = "block";
-  evt.currentTarget.className += " active";
-}
-</script>
-
   </body>
-
 </html>
