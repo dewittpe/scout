@@ -1,11 +1,40 @@
+import sys
 import pandas as pd
 import plotly.express as px
 
+# Variable of Interest and paths
+arg = str(sys.argv[1])
+
+if arg == "avoided_co2":
+    VOI = "Avoided CO\u2082 Emissions (MMTons)"
+    plot_path = "./results/plots/cost_effective_avoided_co2/"
+elif arg == "operation_cost_savings":
+    VOI = "Energy Cost Savings (USD)"
+    plot_path = "./results/plots/cost_effective_operation_cost_savings/"
+elif arg == "energy_savings":
+    VOI = "Energy Savings (MMBtu)"
+    plot_path = "./results/plots/cost_effective_energy_savings/"
+else:
+    print("unknown arg value")
+    exit(1)
+
+
+# aggregate by building type
+def unique_strings(l):
+    list_set = set(l)
+    ul = (list(list_set))
+    return '; '.join(ul)
+
+# data import
 fm = pd.read_parquet("./results/plots/financial_metrics.parquet")
 cms = pd.read_parquet("./results/plots/competed_market_savings.parquet")
 
 fm.sort_values(by = ['ecm', 'variable', 'year'], inplace = True)
 cms.sort_values(by = ['ecm', 'variable', 'year'], inplace = True)
+
+# subset
+set(list(cms["variable"]))
+cms = cms[cms["variable"] == VOI]
 
 # copy the variable column to be used as a facetting value
 fm['facet_row'] = fm["variable"]
@@ -18,16 +47,7 @@ fm.loc[fm["variable"] == "Cost of Conserved Energy ($/MMBtu saved)"
         , "facet_row"] =\
                 "Cost of Conserved Energy<br>($/MMBtu saved)"
 
-# subset
-VOI = "Avoided CO\u2082 Emissions (MMTons)" # Variable of Interest
-cms = cms[cms["variable"] == VOI]
-
-# aggregate by building type
-def unique_strings(l):
-    list_set = set(l)
-    ul = (list(list_set))
-    return '; '.join(ul)
-
+# aggregate
 cms =\
     cms.groupby(["adoption_scenario", "ecm", "variable", "year"])\
             .agg({
@@ -76,7 +96,7 @@ def plot_year(yr = 2022):
 
 yr = min(plot_data["year"])
 while (yr <= max(plot_data["year"])):
-    plot_file = "./results/plots/cost_effective_avoided_co2/" + str(yr) + ".html"
+    plot_file = plot_path + str(yr) + ".html"
     print("Writing " + plot_file)
     plot_year(yr = yr).write_html(plot_file)
     yr = yr + 1

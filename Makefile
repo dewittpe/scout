@@ -5,6 +5,7 @@ plotting_datasets += ./results/plots/uncompeted_market_savings.parquet
 plots  = ./results/plots/.financial_metrics
 plots += ./results/plots/.cost_effective_avoided_co2
 plots += ./results/plots/.cost_effective_operation_cost_savings
+plots += ./results/plots/.cost_effective_energy_savings
 plots += ./results/plots/.total_avoided_co2
 plots += ./results/plots/.total_co2
 
@@ -39,14 +40,19 @@ all: $(plots)
 	python $<
 	@touch $@
 
-./results/plots/.cost_effective_avoided_co2 : plot_cost_effective_avoided_co2.py ./results/plots/financial_metrics.parquet ./results/plots/competed_market_savings.parquet
+./results/plots/.cost_effective_avoided_co2 : plot_cost_effective.py ./results/plots/financial_metrics.parquet ./results/plots/competed_market_savings.parquet
 	mkdir -p ./results/plots/cost_effective_avoided_co2
-	python $<
+	python $< avoided_co2
 	@touch $@
 
-./results/plots/.cost_effective_operation_cost_savings : plot_cost_effective_operation_cost_savings.py ./results/plots/financial_metrics.parquet ./results/plots/competed_market_savings.parquet
+./results/plots/.cost_effective_operation_cost_savings : plot_cost_effective.py ./results/plots/financial_metrics.parquet ./results/plots/competed_market_savings.parquet
 	mkdir -p ./results/plots/cost_effective_operation_cost_savings
-	python $<
+	python $< operation_cost_savings
+	@touch $@
+
+./results/plots/.cost_effective_energy_savings : plot_cost_effective.py ./results/plots/financial_metrics.parquet ./results/plots/competed_market_savings.parquet
+	mkdir -p ./results/plots/cost_effective_energy_savings
+	python $< energy_savings
 	@touch $@
 
 ./results/plots/.total_avoided_co2 : plot_total_avoided_co2.py ./results/plots/competed_market_savings.parquet
