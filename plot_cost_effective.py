@@ -91,6 +91,7 @@ def plot_year(yr = 2022):
                 }
             )
     fig.update_yaxes(matches = None, exponentformat = "e")
+    fig.update_xaxes(exponentformat = "e")
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     return(fig)
 
