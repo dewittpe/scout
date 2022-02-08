@@ -17,6 +17,12 @@
               document.getElementById("fm_ecm_plot").data = new_data;
             }
 
+      function get_total_co2_ecm() {
+              var e = document.getElementById("total_co2_ecm_select");
+              var new_data = "./total_co2/" + e.options[e.selectedIndex].value + ".html";
+              document.getElementById("total_co2_ecm_plot").data = new_data;
+            }
+
       function openGraphicsSet(evt, gset) {
         // Declare all variables
         var i, tabcontent, tablinks;
@@ -141,14 +147,14 @@
     <button class="tablinks" onclick="openGraphicsSet(event, 'Financial_Metrics')">Financial Metrics </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Avoided_CO2')">Cost Effective Avoided CO<sub>2</sub> </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Avoided_CO2')">Total Avoided CO<sub>2</sub> </button>
-    <button class="tablinks" onclick="openGraphicsSet(event, 'Total_CO2')">Total CO<sub>2</sub> </button>
+    <button class="tablinks" onclick="openGraphicsSet(event, 'Total_CO2')">Total CO<sub>2</sub> Emissions </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Operation_Cost_Savings')">Cost Effective Operation Cost Savings </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Cost')">Total Cost </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Cost_Effective_Energy_Savings')">Cost Effective Energy Savings </button>
     <button class="tablinks" onclick="openGraphicsSet(event, 'Total_Energy')">Total Energy </button>
   </div>
 
-  <!-- Tab Conent -->
+  <!-- Tab Content -->
 
   <div id="Financial_Metrics" class="tabcontent">
     <div class='subtab'>
@@ -166,7 +172,6 @@
     </div>
     <div id='fm_by_ecm' class="subtabcontent">
       <p> Select an ECM to plot <div id="all_fm_ecms_div"></div> </p>
-
       <object id = 'fm_ecm_plot' type = "text/html" data = "./financial_metrics/each_ecm/Best Com. Air Sealing (Exist).html" style="width:1600px;height:800px;"></object>
     </div>
   </div>
@@ -240,7 +245,8 @@
   </div>
 
   <div id="Total_CO2" class="tabcontent">
-    Total CO<sub>2</sub> -- Under development
+      <p> Select an ECM to plot <div id="total_co2_ecms_div"></div> </p>
+      <object id = 'total_co2_ecm_plot' type = "text/html" data="./total_co2/" style="width:1600px;height:800px;"></object>
   </div>
 
   <div id="Cost_Effective_Operation_Cost_Savings" class="tabcontent">
@@ -262,6 +268,7 @@
   </body>
 
 
-  <script src="./financial_metrics/each_ecm.js">
-  </script>
+  <script src="./financial_metrics/each_ecm.js"> </script>
+  <script src="./total_co2/each_ecm.js"> </script>
+
 </html>

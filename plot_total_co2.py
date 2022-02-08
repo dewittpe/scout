@@ -55,3 +55,18 @@ for ecm in set(ms["ecm"]):
     print("Writing: ./results/plots/total_co2/" + ecm + ".html")
     fig.write_html("./results/plots/total_co2/" + ecm + ".html")
 
+
+# create the java script needed for a dropdown list of the ecms
+with open('./results/plots/total_co2/each_ecm.js', 'w') as f:
+    f.write('var total_co2_ecm_select_list = document.createElement("select");\n')
+    f.write('var total_co2_ecms =' + "['--', '" + "', '".join(sorted(set(list(ms["ecm"])))) + "']\n")
+    f.write('total_co2_ecm_select_list.setAttribute("id", "total_co2_ecm_select");\n')
+    f.write('total_co2_ecm_select_list.setAttribute("onchange", "if (this.selectedIndex) get_total_co2_ecm();");\n')
+    f.write('document.getElementById("total_co2_ecms_div").appendChild(total_co2_ecm_select_list);\n')
+    f.write('for (var i = 0; i < total_co2_ecms.length; i++) {\n')
+    f.write('\tvar option = document.createElement("option");\n')
+    f.write('\toption.setAttribute("value", total_co2_ecms[i]);\n')
+    f.write('\toption.text = total_co2_ecms[i];\n')
+    f.write('\ttotal_co2_ecm_select_list.appendChild(option);\n')
+    f.write('}')
+
