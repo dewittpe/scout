@@ -18,8 +18,9 @@ fm.loc[fm["variable"] == "Cost of Conserved Energy ($/MMBtu saved)"
         , "facet_row"] =\
                 "Cost of Conserved Energy<br>($/MMBtu saved)"
 
-# subset to avoided CO2
-cms = cms[cms["variable"] == "Avoided CO\u2082 Emissions (MMTons)"]
+# subset
+VOI = "Avoided CO\u2082 Emissions (MMTons)" # Variable of Interest
+cms = cms[cms["variable"] == VOI]
 
 # aggregate by building type
 def unique_strings(l):
@@ -54,7 +55,7 @@ plot_data["year"] = plot_data["year"].astype(str).astype(int)
 def plot_year(yr = 2022):
     fig = px.scatter(
             plot_data[(plot_data["year"] == yr)]
-            , x = "Avoided CO₂ Emissions (MMTons)"
+            , x = VOI
             , y = "value"
             , symbol = "building_class"
             , color = "end_use"
@@ -63,7 +64,7 @@ def plot_year(yr = 2022):
             , title = "Calendar Year " + str(yr)
             , hover_data = {
                 "ecm": True,
-                "Avoided CO₂ Emissions (MMTons)": True,
+                VOI : True,
                 "value": True,
                 "end_use": True,
                 "building_class": True
@@ -73,7 +74,7 @@ def plot_year(yr = 2022):
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     return(fig)
 
-yr = 2022
+yr = min(plot_data["year"])
 while (yr <= max(plot_data["year"])):
     plot_file = "./results/plots/cost_effective_avoided_co2/" + str(yr) + ".html"
     print("Writing " + plot_file)
