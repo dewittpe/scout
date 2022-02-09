@@ -320,7 +320,23 @@
   </div>
 
   <div id="Total_Cost_Savings" class="tabcontent">
-    under dev
+    <div class="subtab">
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_savings_by_region')">By Region</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_savings_by_building_class')">By Building Class</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_savings_by_end_use')">By End Use</button>
+    </div>
+
+    <div id='total_cost_savings_by_region' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_cost_savings/by_region.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id='total_cost_savings_by_building_class' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_cost_savings/by_building_class.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id='total_cost_savings_by_end_use' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_cost_savings/by_end_use.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
   </div>
 
   <div id="Total_Cost" class="tabcontent">
@@ -369,7 +385,23 @@
   </div>
 
   <div id="Total_Energy_Savings" class="tabcontent">
-    under dev
+    <div class="subtab">
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_savings_by_region')">By Region</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_savings_by_building_class')">By Building Class</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_savings_by_end_use')">By End Use</button>
+    </div>
+
+    <div id='total_energy_savings_by_region' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_energy_savings/by_region.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id='total_energy_savings_by_building_class' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_energy_savings/by_building_class.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id='total_energy_savings_by_end_use' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_energy_savings/by_end_use.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
   </div>
 
   <div id="Total_Energy" class="tabcontent">
