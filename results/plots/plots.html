@@ -275,8 +275,26 @@
   </div>
 
   <div id="Total_Carbon_Emission" class="tabcontent">
+
+    <div class="subtab">
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_carbon_ecms')">Select an ECM </button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_carbon_map')">Max Adoption Potential (All ECMS)</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_carbon_tp')">Technical Potential (All ECMS)</button>
+    </div>
+
+    <div id='total_carbon_ecms' class = 'subtabcontent'>
       <p> Select an ECM to plot <div id="total_carbon_ecms_div"></div> </p>
       <object id = 'total_carbon_ecm_plot' type = "text/html" style="width:1600px;height:800px;"></object>
+    </div>
+
+    <div id = 'total_carbon_map' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_carbon/_MAP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id = 'total_carbon_tp' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_carbon/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
   </div>
 
   <div id="Cost_Effective_Operation_Cost_Savings" class="tabcontent">
@@ -340,8 +358,24 @@
   </div>
 
   <div id="Total_Cost" class="tabcontent">
+    <div class="subtab">
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_ecms')">Select an ECM </button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_map')">Max Adoption Potential (All ECMS)</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_tp')">Technical Potential (All ECMS)</button>
+    </div>
+
+    <div id='total_cost_ecms' class = 'subtabcontent'>
       <p> Select an ECM to plot <div id="total_cost_ecms_div"></div> </p>
       <object id = 'total_cost_ecm_plot' type = "text/html" style="width:1600px;height:800px;"></object>
+    </div>
+
+    <div id = 'total_cost_map' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_cost/_MAP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id = 'total_cost_tp' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_cost/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
   </div>
 
   <div id="Cost_Effective_Energy_Savings" class="tabcontent">
@@ -405,8 +439,24 @@
   </div>
 
   <div id="Total_Energy" class="tabcontent">
+    <div class="subtab">
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_ecms')">Select an ECM </button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_map')">Max Adoption Potential (All ECMS)</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_tp')">Technical Potential (All ECMS)</button>
+    </div>
+
+    <div id='total_energy_ecms' class = 'subtabcontent'>
       <p> Select an ECM to plot <div id="total_energy_ecms_div"></div> </p>
       <object id = 'total_energy_ecm_plot' type = "text/html" style="width:1600px;height:800px;"></object>
+    </div>
+
+    <div id = 'total_energy_map' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_energy/_MAP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
+
+    <div id = 'total_energy_tp' class = 'subtabcontent'>
+      <object type = "text/html" data="./total_energy/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+    </div>
   </div>
 
   </body>

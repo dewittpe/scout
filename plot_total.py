@@ -45,6 +45,7 @@ ms = ms.groupby(["adoption_scenario", "ecm", "competed", "results_scenario", "ye
             })
 ms.reset_index(inplace = True)
 
+# create a plot for each ecm with a facet for adoption_scenario
 for ecm in set(ms["ecm"]):
     fig = px.scatter(
             ms[ms["ecm"] == ecm],
@@ -59,7 +60,7 @@ for ecm in set(ms["ecm"]):
                 "results_scenario": "Results Scenario",
                 "competed": "Competed"
                 },
-            title = "ECM: " + ecm + "<br><sup>Building Class: " +\
+            title = ecm + "<br><sup>Building Class: " +\
                     unique_strings(ms.loc[ms["ecm"] == ecm, "building_class"]) +\
                     " | Region: " +\
                     unique_strings(ms.loc[ms["ecm"] == ecm, "region"]) +\
@@ -67,6 +68,7 @@ for ecm in set(ms["ecm"]):
                     unique_strings(ms.loc[ms["ecm"] == ecm, "end_use"]) +\
                     "</sup>"
             )
+    fig.update_yaxes(exponentformat = "e")
     fig.update_traces(mode = "lines+markers")
     fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
     print("Writing: " + plot_path + ecm + ".html")
@@ -87,3 +89,157 @@ with open(plot_path + 'each_ecm.js', 'w') as f:
     f.write('\ttotal_' + arg + '_ecm_select_list.appendChild(option);\n')
     f.write('}')
 
+# Create a massive plot, one for each adoption_scenario with a facet for each
+# ecm
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+unique_ecms = list(set(list(ms["ecm"])))
+unique_ecms.sort()
+
+ecm_titles = []
+for ecm in unique_ecms:
+    ecm_titles.append(ecm + "<br><sup>Building Class: " +\
+            unique_strings(ms.loc[ms["ecm"] == ecm, "building_class"]) +\
+            " <br> Region: " +\
+            unique_strings(ms.loc[ms["ecm"] == ecm, "region"]) +\
+            " <br> End Use: " +\
+            unique_strings(ms.loc[ms["ecm"] == ecm, "end_use"]) +\
+            "</sup>")
+
+fig = make_subplots(
+        cols = 4,
+        rows = round(len(unique_ecms) / 4 + 1),
+        subplot_titles = ecm_titles
+        )
+row = 1
+col = 1
+for ecm in unique_ecms:
+    d = ms[(ms["adoption_scenario"] == "Max adoption potential") &
+           (ms["ecm"] == ecm)]
+    fig.add_trace(
+            go.Scatter(
+                x = d["year"][(d["results_scenario"] == "baseline") &
+                      (d["competed"] == "Competed")],
+                y = d["value"][(d["results_scenario"] == "baseline") &
+                      (d["competed"] == "Competed")],
+                name = "baseline; competed",
+                line_color = "black",
+                legendgroup = 'group1',
+                showlegend = (row + col == 2)
+                ),
+        row = row, col = col)
+    fig.add_trace(
+            go.Scatter(
+                x = d["year"][(d["results_scenario"] == "baseline") &
+                      (d["competed"] == "Uncompeted")],
+                y = d["value"][(d["results_scenario"] == "baseline") &
+                      (d["competed"] == "Uncompeted")],
+                name = "baseline; uncompeted",
+                line_color = "red",
+                legendgroup = 'group1',
+                showlegend = (row + col == 2)
+                ),
+        row = row, col = col)
+    fig.add_trace(
+            go.Scatter(
+                x = d["year"][(d["results_scenario"] == "efficient") &
+                      (d["competed"] == "Competed")],
+                y = d["value"][(d["results_scenario"] == "efficient") &
+                      (d["competed"] == "Competed")],
+                name = "efficient; competed",
+                line_color = "blue",
+                legendgroup = 'group1',
+                showlegend = (row + col == 2)
+                ),
+        row = row, col = col)
+    fig.add_trace(
+            go.Scatter(
+                x = d["year"][(d["results_scenario"] == "efficient") &
+                      (d["competed"] == "Uncompeted")],
+                y = d["value"][(d["results_scenario"] == "efficient") &
+                      (d["competed"] == "Uncompeted")],
+                name = "efficient; uncompeted",
+                line_color = "green",
+                legendgroup = 'group1',
+                showlegend = (row + col == 2)
+                ),
+        row = row, col = col)
+    fig.update_yaxes(exponentformat = "e", row = row, col = col)
+    col = col + 1
+    if (col > 4):
+        col = 1
+        row = row + 1
+
+fig.update_layout(height = 1600 * 7, width = 1600, yaxis = dict(exponentformat = 'e'))
+print("Writing: " + plot_path + "_MAP.html")
+fig.write_html(plot_path + "_MAP.html")
+
+
+fig = make_subplots(
+        cols = 4,
+        rows = round(len(unique_ecms) / 4 + 1),
+        subplot_titles = ecm_titles
+        )
+row = 1
+col = 1
+for ecm in unique_ecms:
+    d = ms[(ms["adoption_scenario"] == "Technical potential") &
+           (ms["ecm"] == ecm)]
+    fig.add_trace(
+            go.Scatter(
+                x = d["year"][(d["results_scenario"] == "baseline") &
+                      (d["competed"] == "Competed")],
+                y = d["value"][(d["results_scenario"] == "baseline") &
+                      (d["competed"] == "Competed")],
+                name = "baseline; competed",
+                line_color = "black",
+                legendgroup = 'group1',
+                showlegend = (row + col == 2)
+                ),
+        row = row, col = col)
+    fig.add_trace(
+            go.Scatter(
+                x = d["year"][(d["results_scenario"] == "baseline") &
+                      (d["competed"] == "Uncompeted")],
+                y = d["value"][(d["results_scenario"] == "baseline") &
+                      (d["competed"] == "Uncompeted")],
+                name = "baseline; uncompeted",
+                line_color = "red",
+                legendgroup = 'group1',
+                showlegend = (row + col == 2)
+                ),
+        row = row, col = col)
+    fig.add_trace(
+            go.Scatter(
+                x = d["year"][(d["results_scenario"] == "efficient") &
+                      (d["competed"] == "Competed")],
+                y = d["value"][(d["results_scenario"] == "efficient") &
+                      (d["competed"] == "Competed")],
+                name = "efficient; competed",
+                line_color = "blue",
+                legendgroup = 'group1',
+                showlegend = (row + col == 2)
+                ),
+        row = row, col = col)
+    fig.add_trace(
+            go.Scatter(
+                x = d["year"][(d["results_scenario"] == "efficient") &
+                      (d["competed"] == "Uncompeted")],
+                y = d["value"][(d["results_scenario"] == "efficient") &
+                      (d["competed"] == "Uncompeted")],
+                name = "efficient; uncompeted",
+                line_color = "green",
+                legendgroup = 'group1',
+                showlegend = (row + col == 2)
+                ),
+        row = row, col = col)
+    col = col + 1
+    if (col > 4):
+        col = 1
+        row = row + 1
+
+fig.update_layout(height = 1600 * 7, width = 1600)
+print("Writing: " + plot_path + "_TP.html")
+fig.write_html(plot_path + "_TP.html")
