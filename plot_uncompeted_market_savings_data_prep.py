@@ -66,6 +66,13 @@ ums.reset_index(inplace = True)
 ums.rename(columns = {"index" : "year"}, inplace = True)
 ums["competed"] = "Uncompeted"
 
+ums["construction"] = ""
+ums.loc[ums["building_class"].str.contains("New"), "construction"] = "New"
+ums.loc[ums["building_class"].str.contains("Existing"), "construction"] = "Existing"
+
+ums.loc[ums["building_class"].str.contains("Residential"), "building_class"] = "Residential"
+ums.loc[ums["building_class"].str.contains("Commercial"), "building_class"] = "Commercial"
+
 print("Writing ./results/plots/uncompeted_market_savings.parquet")
 ums.to_parquet("./results/plots/uncompeted_market_savings.parquet")
 

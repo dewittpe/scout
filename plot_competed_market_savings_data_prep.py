@@ -81,6 +81,13 @@ cms["ecc"] = "carbon"
 cms.loc[cms["variable"].str.contains("Energy"), "ecc"] = "energy"
 cms.loc[cms["variable"].str.contains("Cost"), "ecc"] = "cost"
 
+cms["construction"] = ""
+cms.loc[cms["building_class"].str.contains("New"), "construction"] = "New"
+cms.loc[cms["building_class"].str.contains("Existing"), "construction"] = "Existing"
+
+cms.loc[cms["building_class"].str.contains("Residential"), "building_class"] = "Residential"
+cms.loc[cms["building_class"].str.contains("Commercial"), "building_class"] = "Commercial"
+
 print("Writing ./results/plots/competed_market_savings.parquet")
 cms.to_parquet("./results/plots/competed_market_savings.parquet")
 
