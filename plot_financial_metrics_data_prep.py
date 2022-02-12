@@ -48,7 +48,7 @@ for k in fm_variable_keys:
 
 # create the fm DataFrame
 ecm_count = 1
-fm = pd.DataFrame()
+fm = []
 for ecm in ecm_results_keys:
     print("(" + str(ecm_count) + "/" + str(len(ecm_results_keys)) +\
             ") Extracting Financial Metrics for: " + ecm)
@@ -61,7 +61,10 @@ for ecm in ecm_results_keys:
                 )
         x['variable'] = v
         x['ecm'] = ecm
-        fm = pd.concat([fm, x])
+        fm.append(x)
+
+print("Concat to one DataFrame...")
+fm = pd.concat(fm)
 
 # reset the index and rename -- the index is the year.
 fm.reset_index(inplace = True)

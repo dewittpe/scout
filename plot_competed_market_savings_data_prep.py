@@ -41,20 +41,15 @@ CMS = "Markets and Savings (by Category)"
 
 ecm_count = 1
 
-cms = pd.DataFrame()
+cms = []
 for ecm in ecm_results_keys:
     print("(" + str(ecm_count) + "/" + str(len(ecm_results_keys)) +\
             ") Extracting Competed Markets Savings for: " + ecm)
     ecm_count = ecm_count + 1
-    df1 = pd.DataFrame()
     for ap in list(ecm_results[ecm][CMS].keys()):
-        df2 = pd.DataFrame()
         for v in list(ecm_results[ecm][CMS][ap].keys()):
-            df3 = pd.DataFrame()
             for rg in list(ecm_results[ecm][CMS][ap][v].keys()):
-                df4 = pd.DataFrame()
                 for bg in list(ecm_results[ecm][CMS][ap][v][rg].keys()):
-                    df5 = pd.DataFrame()
                     for eu in list(ecm_results[ecm][CMS][ap][v][rg][bg].keys()):
                         x = pd.DataFrame.from_dict(
                                 ecm_results[ecm][CMS][ap][v][rg][bg][eu]
@@ -67,12 +62,10 @@ for ecm in ecm_results_keys:
                         x['variable'] = v
                         x['adoption_scenario'] = ap
                         x['ecm'] = ecm
-                        df5 = pd.concat([df5, x])
-                    df4 = pd.concat([df4, df5])
-                df3 = pd.concat([df3, df4])
-            df2 = pd.concat([df2, df3])
-        df1 = pd.concat([df1, df2])
-    cms = pd.concat([cms, df1])
+                        cms.append(x)
+
+print("Concat to one DataFrame...")
+cms = pd.concat(cms)
 
 # reset the index and rename -- the index is the year.
 cms.reset_index(inplace = True)
