@@ -89,6 +89,27 @@
         evt.currentTarget.className += " active";
       }
 
+      function openSubSubGraphicsSet(evt, gset) {
+        // Declare all variables
+        var i, subsubtabcontent, subsubtablinks;
+
+        // Get all elements with class="subsubtabcontent" and hide them
+        subsubtabcontent = document.getElementsByClassName("subsubtabcontent");
+        for (i = 0; i < subsubtabcontent.length; i++) {
+          subsubtabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="subsubtablinks" and remove the class "active"
+        subsubtablinks = document.getElementsByClassName("subsubtablinks");
+        for (i = 0; i < subsubtablinks.length; i++) {
+          subsubtablinks[i].className = subsubtablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current subsubtab, and add an "active" class to the button that opened the subsubtab
+        document.getElementById(gset).style.display = "block";
+        evt.currentTarget.className += " active";
+      }
+
 
     </script>
 
@@ -103,6 +124,12 @@
       }
 
       .subtab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+      }
+
+      .subsubtab {
         overflow: hidden;
         border: 1px solid #ccc;
         background-color: #f1f1f1;
@@ -129,12 +156,26 @@
         transition: 0.3s;
       }
 
+      .subsubtab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+      }
+
       /* Change background color of buttons on hover */
       .tab button:hover {
         background-color: #ddd;
       }
 
       .subtab button:hover {
+        background-color: #ddd;
+      }
+
+      .subsubtab button:hover {
         background-color: #ddd;
       }
 
@@ -147,6 +188,10 @@
         background-color: #ccc;
       }
 
+      .subsubtab button.active {
+        background-color: #ccc;
+      }
+
       /* Style the tab content */
       .tabcontent {
         display: none;
@@ -156,6 +201,11 @@
       }
 
       .subtabcontent {
+        display: none;
+        padding: 6px 12px;
+      }
+
+      .subsubtabcontent {
         display: none;
         padding: 6px 12px;
       }
@@ -278,8 +328,8 @@
 
     <div class="subtab">
       <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_carbon_ecms')">Select an ECM </button>
-      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_carbon_map')">Max Adoption Potential (All ECMS)</button>
-      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_carbon_tp')">Technical Potential (All ECMS)</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_carbon_map')">Max Adoption Potential</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_carbon_tp')">Technical Potential</button>
     </div>
 
     <div id='total_carbon_ecms' class = 'subtabcontent'>
@@ -288,11 +338,42 @@
     </div>
 
     <div id = 'total_carbon_map' class = 'subtabcontent'>
-      <object type = "text/html" data="./total_carbon/_MAP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+
+      <div class = 'subsubtab'>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_carbon_map_all_ecms')">All ECMs</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_carbon_map_commerical')">Commerical Buildings</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_carbon_map_residential')">Residential Buildings</button>
+      </div>
+
+      <div id = 'total_carbon_map_all_ecms' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_carbon/_MAP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_carbon_map_commerical' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_carbon/_MAP_commercial.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_carbon_map_residential' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_carbon/_MAP_residential.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+
     </div>
 
     <div id = 'total_carbon_tp' class = 'subtabcontent'>
-      <object type = "text/html" data="./total_carbon/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      <div class = 'subsubtab'>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_carbon_tp_all_ecms')">All ECMs</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_carbon_tp_commerical')">Commerical Buildings</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_carbon_tp_residential')">Residential Buildings</button>
+      </div>
+
+      <div id = 'total_carbon_tp_all_ecms' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_carbon/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_carbon_tp_commerical' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_carbon/_TP_commercial.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_carbon_tp_residential' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_carbon/_TP_residential.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+
     </div>
 
   </div>
@@ -360,8 +441,8 @@
   <div id="Total_Cost" class="tabcontent">
     <div class="subtab">
       <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_ecms')">Select an ECM </button>
-      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_map')">Max Adoption Potential (All ECMS)</button>
-      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_tp')">Technical Potential (All ECMS)</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_map')">Max Adoption Potential</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_cost_tp')">Technical Potential</button>
     </div>
 
     <div id='total_cost_ecms' class = 'subtabcontent'>
@@ -370,11 +451,39 @@
     </div>
 
     <div id = 'total_cost_map' class = 'subtabcontent'>
-      <object type = "text/html" data="./total_cost/_MAP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      <div class = 'subsubtab'>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_cost_map_all_ecms')">All ECMs</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_cost_map_commerical')">Commerical Buildings</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_cost_map_residential')">Residential Buildings</button>
+      </div>
+
+      <div id = 'total_cost_map_all_ecms' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_cost/_MAP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_cost_map_commerical' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_cost/_MAP_commercial.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_cost_map_residential' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_cost/_MAP_residential.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
     </div>
 
     <div id = 'total_cost_tp' class = 'subtabcontent'>
-      <object type = "text/html" data="./total_cost/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      <div class = 'subsubtab'>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_cost_tp_all_ecms')">All ECMs</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_cost_tp_commerical')">Commerical Buildings</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_cost_tp_residential')">Residential Buildings</button>
+      </div>
+
+      <div id = 'total_cost_tp_all_ecms' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_cost/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_cost_tp_commerical' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_cost/_TP_commercial.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_cost_tp_residential' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_cost/_TP_residential.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
     </div>
   </div>
 
@@ -441,8 +550,8 @@
   <div id="Total_Energy" class="tabcontent">
     <div class="subtab">
       <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_ecms')">Select an ECM </button>
-      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_map')">Max Adoption Potential (All ECMS)</button>
-      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_tp')">Technical Potential (All ECMS)</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_map')">Max Adoption Potential</button>
+      <button class="subtablinks" onclick = "openSubGraphicsSet(event, 'total_energy_tp')">Technical Potential</button>
     </div>
 
     <div id='total_energy_ecms' class = 'subtabcontent'>
@@ -451,11 +560,40 @@
     </div>
 
     <div id = 'total_energy_map' class = 'subtabcontent'>
-      <object type = "text/html" data="./total_energy/_MAP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      <div class = 'subsubtab'>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_energy_map_all_ecms')">All ECMs</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_energy_map_commerical')">Commerical Buildings</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_energy_map_residential')">Residential Buildings</button>
+      </div>
+
+      <div id = 'total_energy_map_all_ecms' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_energy/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_energy_map_commerical' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_energy/_MAP_commercial.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_energy_map_residential' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_energy/_MAP_residential.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+    </div>
     </div>
 
     <div id = 'total_energy_tp' class = 'subtabcontent'>
-      <object type = "text/html" data="./total_energy/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      <div class = 'subsubtab'>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_energy_tp_all_ecms')">All ECMs</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_energy_tp_commerical')">Commerical Buildings</button>
+        <button class="subsubtablinks" onclick = "openSubSubGraphicsSet(event, 'total_energy_tp_residential')">Residential Buildings</button>
+      </div>
+
+      <div id = 'total_energy_tp_all_ecms' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_energy/_TP.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_energy_tp_commerical' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_energy/_TP_commercial.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
+      <div id = 'total_energy_tp_residential' class = 'subsubtabcontent'>
+        <object type = "text/html" data="./total_energy/_TP_residential.html" style="width:99%;height:800px;overflow:scroll;"> </object>
+      </div>
     </div>
   </div>
 

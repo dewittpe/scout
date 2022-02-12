@@ -184,4 +184,24 @@ fig.update_layout(height = 1600 * 7, width = 1600)
 print("Writing: " + plot_path + "_TP.html")
 fig.write_html(plot_path + "_TP.html")
 
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["building_class"] == "Commercial")])
+fig.update_layout(height = 1600 * 7, width = 1600)
+print("Writing: " + plot_path + "_MAP_commercial.html")
+fig.write_html(plot_path + "_MAP_commercial.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["building_class"] == "Residential")])
+fig.update_layout(height = 1600 * 7, width = 1600)
+print("Writing: " + plot_path + "_MAP_residential.html")
+fig.write_html(plot_path + "_MAP_residential.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["building_class"] == "Commercial")])
+fig.update_layout(height = 1600 * 7, width = 1600)
+print("Writing: " + plot_path + "_TP_commercial.html")
+fig.write_html(plot_path + "_TP_commercial.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["building_class"] == "Residential")])
+fig.update_layout(height = 1600 * 7, width = 1600)
+print("Writing: " + plot_path + "_TP_residential.html")
+fig.write_html(plot_path + "_TP_residential.html")
+
 
