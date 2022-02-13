@@ -4,6 +4,13 @@ from subprocess import PIPE
 import os
 
 ################################################################################
+def mtime(p):
+    if os.path.exists(p):
+        return os.path.getmtime(p)
+    else:
+        return 0
+
+################################################################################
 # Check if ecm_prep.py and/or run.py need to be evaluated.
 
 if not os.path.exists("./supporting_data/ecm_prep.json"):
@@ -29,71 +36,87 @@ if ( (ecm_results_json_mtime < ecm_prep_json_mtime) |\
 
 ################################################################################
 # Translate the JSON to DataFrames and save as parquet
-fmdpmt  = os.path.getmtime("./plot_financial_metrics_data_prep.py")
-cmsdpmt = os.path.getmtime("./plot_competed_market_savings_data_prep.py")
-umsdpmt = os.path.getmtime("./plot_uncompeted_market_savings_data_prep.py")
+fmdpmt  = mtime("./plot_financial_metrics_data_prep.py")
+cmsdpmt = mtime("./plot_competed_market_savings_data_prep.py")
+umsdpmt = mtime("./plot_uncompeted_market_savings_data_prep.py")
 
-if os.path.exists("./results/plots/financial_metrics.parquet"):
-    fm_parquet_mt = os.path.getmtime('./results/plots/financial_metrics.parquet')
-else:
-    fm_parquet_mt = 0
-
-if os.path.exists("./results/plots/competed_market_savings.parquet"):
-    cms_parquet_mt = os.path.getmtime('./results/plots/competed_market_savings.parquet')
-else:
-    cms_parquet_mt = 0
-
-if os.path.exists("./results/plots/uncompeted_market_savings.parquet"):
-    ums_parquet_mt = os.path.getmtime('./results/plots/uncompeted_market_savings.parquet')
-else:
-    ums_parquet_mt = 0
+fm_parquet_mt  = mtime('./results/plots/financial_metrics.parquet')
+cms_parquet_mt = mtime('./results/plots/competed_market_savings.parquet')
+ums_parquet_mt = mtime('./results/plots/uncompeted_market_savings.parquet')
 
 cmd_list = []
-if fm_parquet_mt < fmdpmt:
-    print("financial_metrics.parquet does need updating")
+if ((fm_parquet_mt < fmdpmt) | (fm_parquet_mt < ecm_results_json_mtime)):
+    print("financial_metrics.parquet will be updated")
     cmd_list.append(['python', './plot_financial_metrics_data_prep.py'])
 else:
-    print("financial_metrics.parquet does not need updating")
+    print("financial_metrics.parquet is up to date.")
 
-if cms_parquet_mt < cmsdpmt:
-    print("competed_market_savings.parquet does need updating")
+if ((cms_parquet_mt < cmsdpmt) | (cms_parquet_mt < ecm_results_json_mtime)):
+    print("competed_market_savings.parquet will be updated")
     cmd_list.append(['python', './plot_competed_market_savings_data_prep.py'])
 else:
-    print("competed_market_savings.parquet does not need updating")
+    print("competed_market_savings.parquet is up to date.")
 
-if ums_parquet_mt < umsdpmt:
-    print("uncompeted_market_savings.parquet does need updating")
+if ((ums_parquet_mt < umsdpmt) | (ums_parquet_mt < ecm_prep_json_mtime)):
+    print("uncompeted_market_savings.parquet will be updated")
     cmd_list.append(['python', './plot_uncompeted_market_savings_data_prep.py'])
 else:
-    print("uncompeted_market_savings.parquet does not need updating")
+    print("uncompeted_market_savings.parquet is up to date.")
 
 if len(cmd_list) > 0:
     proc_list = [Popen(cmd, stdout = PIPE, stderr = PIPE) for cmd in cmd_list]
     for proc in proc_list:
         proc.wait()
 
+################################################################################
+# Build command list for plots
+cmd_list = []
 
-#subprocess.run(['python', './plot_financial_metrics_data_prep.py'])
-#subprocess.run(['python', './plot_uncompeted_market_savings_data_prep.py'])
-#subprocess.run(['python', './plot_competed_market_savings_data_prep.py'])
+# get the mtime for the parquet files again, incase they were updated above
+fm_parquet_mt  = mtime('./results/plots/financial_metrics.parquet')
+cms_parquet_mt = mtime('./results/plots/competed_market_savings.parquet')
+ums_parquet_mt = mtime('./results/plots/uncompeted_market_savings.parquet')
 
-# Generate "financial metrics" graphics
-#subprocess.run(['python', './plot_financial_metrics.py'])
+# Financial Metric Plots
+fm_mt = mtime("./results/plots/.financial_metrics")
 
-# Generate "cost effective" graphics
-#subprocess.run(['python', './plot_cost_effective.py', 'carbon'])
-#subprocess.run(['python', './plot_cost_effective.py', 'cost'])
-#subprocess.run(['python', './plot_cost_effective.py', 'energy'])
+if ((fm_mt < fm_parquet_mt) | (fm_mt < os.path.getmtime("plot_financial_metrics.py"))):
+    print("Financial metric plots will be updated.")
+    cmd_list.append(['python', './plot_financial_metrics.py'])
+else:
+    print("Financial metric plots are up to date.")
 
-# Generate "total savings" graphics
-#subprocess.run(['python', './plot_total_savings.py', 'carbon'])
-#subprocess.run(['python', './plot_total_savings.py', 'cost'])
-#subprocess.run(['python', './plot_total_savings.py', 'energy'])
+# Cost Effective Savings
+for cce in ['carbon', 'cost', 'energy']:
+    mt = mtime('./results/plots/.cost_effective_' + cce + '_savings')
+    if ((mt < mtime('./plot_cost_effective.py')) | (mt < cms_parquet_mt) | (mt < fm_parquet_mt)):
+        print("Cost Effective " + cce + " Savings will be updated.")
+        cmd_list.append(['python', './plot_cost_effective.py', cce])
+    else:
+        print("Cost Effective " + cce + " Savings is up to date.")
 
-# Generate "total" graphics
-#subprocess.run(['python', './plot_total.py', 'carbon'])
-#subprocess.run(['python', './plot_total.py', 'cost'])
-#subprocess.run(['python', './plot_total.py', 'energy'])
+# Total Savings
+for cce in ['carbon', 'cost', 'energy']:
+    mt = mtime('./results/plots/.total_' + cce + '_savings')
+    if ((mt < mtime('./plot_total_savings.py')) | (mt < cms_parquet_mt)):
+        print("Total " + cce + " Savings will be updated.")
+        cmd_list.append(['python', './plot_total_savings.py', cce])
+    else:
+        print("Total " + cce + " Savings is up to date.")
+
+# Totals
+for cce in ['carbon', 'cost', 'energy']:
+    mt = mtime('./results/plots/.total_' + cce)
+    if ((mt < mtime('./plot_cost_effective.py')) | (mt < cms_parquet_mt) | (mt < ums_parquet_mt)):
+        print("Total " + cce + " will be updated.")
+        cmd_list.append(['python', './plot_total.py', cce])
+    else:
+        print("Total " + cce + " is up to date.")
+
+if len(cmd_list) > 0:
+    proc_list = [Popen(cmd, stdout = PIPE, stderr = PIPE) for cmd in cmd_list]
+    for proc in proc_list:
+        proc.wait()
 
 ################################################################################
 # End of File                     End of File                      End of File #

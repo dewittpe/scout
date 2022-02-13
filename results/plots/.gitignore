@@ -3,7 +3,7 @@
 *.js
 .financial_metrics
 .cost_effective_carbon_savings
-.cost_effective_operation_cost_savings
+.cost_effective_cost_savings
 .cost_effective_energy_savings
 .total_carbon
 .total_cost

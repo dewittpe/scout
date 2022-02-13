@@ -70,4 +70,10 @@ with open('./results/plots/financial_metrics/each_ecm.js', 'w') as f:
     f.write('\toption.text = all_fm_ecms[i];\n')
     f.write('\tall_fm_ecm_select_list.appendChild(option);\n')
     f.write('}')
+    f.close()
+
+with open("./results/plots/.financial_metrics", 'w') as f:
+    f.write("")
+    f.close()
+
 

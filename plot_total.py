@@ -302,6 +302,11 @@ fig.update_layout(height = 1600 * 1, width = 1600)
 print("Writing: " + plot_path + "_TP_Other.html")
 fig.write_html(plot_path + "_TP_Other.html")
 
+
+with open('./results/plots/.total_' + arg, 'w') as f:
+    f.write("");
+    f.close()
+
 ################################################################################
 # End of File                     End of File                      End of File #
 ################################################################################

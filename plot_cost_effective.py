@@ -103,4 +103,7 @@ while (yr <= max(plot_data["year"])):
     yr = yr + 1
 
 
+with open('./results/plots/.cost_effective_' + arg + '_savings', 'w') as f:
+    f.write("");
+    f.close()
 

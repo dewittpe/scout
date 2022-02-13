@@ -111,3 +111,12 @@ print("Writing " + plot_path + "by_end_use.html")
 fig.write_html(plot_path + "by_end_use.html")
 
 
+with open('./results/plots/.total_' + arg + '_savings', 'w') as f:
+    f.write("");
+    f.close()
+
+################################################################################
+# End of File                     End of File                      End of File #
+################################################################################
+
+
