@@ -73,6 +73,11 @@ ums.loc[ums["building_class"].str.contains("Existing"), "construction"] = "Exist
 ums.loc[ums["building_class"].str.contains("Residential"), "building_class"] = "Residential"
 ums.loc[ums["building_class"].str.contains("Commercial"), "building_class"] = "Commercial"
 
+ums["end_use2"] = ums["end_use"]
+ums.loc[ums["end_use"].isin(["Colling (Equip.)", "Heating (Equip.)", "Ventilation"]), "end_use2"] = "HVAC"
+ums.loc[ums["end_use"].isin(["Colling (Env.)", "Heating (Env.)"]), "end_use2"] = "Envelope"
+ums.loc[ums["end_use"].isin(["Computers and Electronics"]), "end_use2"] = "Electronics"
+
 print("Writing ./results/plots/uncompeted_market_savings.parquet")
 ums.to_parquet("./results/plots/uncompeted_market_savings.parquet")
 
