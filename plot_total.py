@@ -171,6 +171,8 @@ def total_plot(df):
                     ),
             row = row, col = col)
         fig.update_yaxes(exponentformat = "e", row = row, col = col)
+        fig.update_layout(#title_text = VOI
+                hovermode = "x unified")
         col = col + 1
         if (col > 4):
             col = 1
