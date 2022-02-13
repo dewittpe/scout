@@ -89,9 +89,14 @@ cms.loc[cms["building_class"].str.contains("Residential"), "building_class"] = "
 cms.loc[cms["building_class"].str.contains("Commercial"), "building_class"] = "Commercial"
 
 cms["end_use2"] = cms["end_use"]
-cms.loc[cms["end_use"].isin(["Colling (Equip.)", "Heating (Equip.)", "Ventilation"]), "end_use2"] = "HVAC"
-cms.loc[cms["end_use"].isin(["Colling (Env.)", "Heating (Env.)"]), "end_use2"] = "Envelope"
+cms.loc[cms["end_use"].isin(["Cooling (Equip.)", "Heating (Equip.)", "Ventilation"]), "end_use2"] = "HVAC"
+cms.loc[cms["end_use"].isin(["Cooling (Env.)", "Heating (Env.)"]), "end_use2"] = "Envelope"
 cms.loc[cms["end_use"].isin(["Computers and Electronics"]), "end_use2"] = "Electronics"
+
+# check
+# cms[["end_use", "end_use2"]].value_counts()
+
+
 
 print("Writing ./results/plots/competed_market_savings.parquet")
 cms.to_parquet("./results/plots/competed_market_savings.parquet")

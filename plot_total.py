@@ -43,9 +43,12 @@ ms = ms.groupby(["adoption_scenario", "ecm", "competed", "results_scenario", "ye
             "value": "sum",
             "building_class" : unique_strings,
             "region" : unique_strings,
-            "end_use" : unique_strings
+            "end_use" : unique_strings,
+            "end_use2" : unique_strings
             })
 ms.reset_index(inplace = True)
+
+ms[["end_use", "end_use2"]].value_counts()
 
 # create a plot for each ecm with a facet for adoption_scenario
 for ecm in set(ms["ecm"]):
@@ -95,10 +98,12 @@ with open(plot_path + 'each_ecm.js', 'w') as f:
 # Create figures with a subplot for each ECM by adoption_scenario
 
 def total_plot(df):
+    if len(df) == 0:
+        fig =  px.scatter(x = [1], y = [1], text = ["No ECM to plot"])
+        return fig
     # get the unique ECMs for the data frame passed in
     unique_ecms = list(set(list(df["ecm"])))
     unique_ecms.sort()
-
     ecm_titles = []
     for ecm in unique_ecms:
         ecm_titles.append(ecm + "<br><sup>Building Class: " +\
@@ -108,7 +113,6 @@ def total_plot(df):
                 " <br> End Use: " +\
                 unique_strings(ms.loc[ms["ecm"] == ecm, "end_use"]) +\
                 "</sup>")
-
     fig = make_subplots(
             cols = 4,
             rows = round(len(unique_ecms) / 4 + 1),
@@ -138,7 +142,7 @@ def total_plot(df):
                           (d["competed"] == "Uncompeted")],
                     name = "baseline; uncompeted",
                     line_color = "red",
-                    legendgroup = 'group1',
+                    legendgroup = 'group2',
                     showlegend = (row + col == 2)
                     ),
             row = row, col = col)
@@ -150,7 +154,7 @@ def total_plot(df):
                           (d["competed"] == "Competed")],
                     name = "efficient; competed",
                     line_color = "blue",
-                    legendgroup = 'group1',
+                    legendgroup = 'group3',
                     showlegend = (row + col == 2)
                     ),
             row = row, col = col)
@@ -162,7 +166,7 @@ def total_plot(df):
                           (d["competed"] == "Uncompeted")],
                     name = "efficient; uncompeted",
                     line_color = "green",
-                    legendgroup = 'group1',
+                    legendgroup = 'group4',
                     showlegend = (row + col == 2)
                     ),
             row = row, col = col)
@@ -184,24 +188,120 @@ fig.update_layout(height = 1600 * 7, width = 1600)
 print("Writing: " + plot_path + "_TP.html")
 fig.write_html(plot_path + "_TP.html")
 
+# By Adoption scenario and building class
+# Commercial
 fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["building_class"] == "Commercial")])
-fig.update_layout(height = 1600 * 7, width = 1600)
+fig.update_layout(height = 1600 * 5, width = 1600)
 print("Writing: " + plot_path + "_MAP_commercial.html")
 fig.write_html(plot_path + "_MAP_commercial.html")
 
-fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["building_class"] == "Residential")])
-fig.update_layout(height = 1600 * 7, width = 1600)
-print("Writing: " + plot_path + "_MAP_residential.html")
-fig.write_html(plot_path + "_MAP_residential.html")
-
 fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["building_class"] == "Commercial")])
-fig.update_layout(height = 1600 * 7, width = 1600)
+fig.update_layout(height = 1600 * 5, width = 1600)
 print("Writing: " + plot_path + "_TP_commercial.html")
 fig.write_html(plot_path + "_TP_commercial.html")
 
+# Residential
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["building_class"] == "Residential")])
+fig.update_layout(height = 1600 * 5, width = 1600)
+print("Writing: " + plot_path + "_MAP_residential.html")
+fig.write_html(plot_path + "_MAP_residential.html")
+
 fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["building_class"] == "Residential")])
-fig.update_layout(height = 1600 * 7, width = 1600)
+fig.update_layout(height = 1600 * 5, width = 1600)
 print("Writing: " + plot_path + "_TP_residential.html")
 fig.write_html(plot_path + "_TP_residential.html")
+
+# By Adoption scenario and end use
+# HVAC
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["end_use2"].str.contains("HVAC"))])
+fig.update_layout(height = 1600 * 4, width = 1600)
+print("Writing: " + plot_path + "_MAP_HVAC.html")
+fig.write_html(plot_path + "_MAP_HVAC.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["end_use2"].str.contains("HVAC"))])
+fig.update_layout(height = 1600 * 4, width = 1600)
+print("Writing: " + plot_path + "_TP_HVAC.html")
+fig.write_html(plot_path + "_TP_HVAC.html")
+
+# Envelope
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["end_use2"].str.contains("Envelope"))])
+fig.update_layout(height = 1600 * 3, width = 1600)
+print("Writing: " + plot_path + "_MAP_Envelope.html")
+fig.write_html(plot_path + "_MAP_Envelope.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["end_use2"].str.contains("Envelope"))])
+fig.update_layout(height = 1600 * 3, width = 1600)
+print("Writing: " + plot_path + "_TP_Envelope.html")
+fig.write_html(plot_path + "_TP_Envelope.html")
+
+# Lighting
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["end_use2"].str.contains("Lighting"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_MAP_Lighting.html")
+fig.write_html(plot_path + "_MAP_Lighting.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["end_use2"].str.contains("Lighting"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_TP_Lighting.html")
+fig.write_html(plot_path + "_TP_Lighting.html")
+
+# water heating
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["end_use2"].str.contains("Water Heating"))])
+fig.update_layout(height = 1600 * 3, width = 1600)
+print("Writing: " + plot_path + "_MAP_Water Heating.html")
+fig.write_html(plot_path + "_MAP_Water Heating.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["end_use2"].str.contains("Water Heating"))])
+fig.update_layout(height = 1600 * 3, width = 1600)
+print("Writing: " + plot_path + "_TP_Water Heating.html")
+fig.write_html(plot_path + "_TP_Water Heating.html")
+
+# Refrigeration
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["end_use2"].str.contains("Refrigeration"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_MAP_Refrigeration.html")
+fig.write_html(plot_path + "_MAP_Refrigeration.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["end_use2"].str.contains("Refrigeration"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_TP_Refrigeration.html")
+fig.write_html(plot_path + "_TP_Refrigeration.html")
+
+# Cooking
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["end_use2"].str.contains("Cooking"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_MAP_Cooking.html")
+fig.write_html(plot_path + "_MAP_Cooking.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["end_use2"].str.contains("Cooking"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_TP_Cooking.html")
+fig.write_html(plot_path + "_TP_Cooking.html")
+
+# Electronics
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["end_use2"].str.contains("Electronics"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_MAP_Electronics.html")
+fig.write_html(plot_path + "_MAP_Electronics.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["end_use2"].str.contains("Electronics"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_TP_Electronics.html")
+fig.write_html(plot_path + "_TP_Electronics.html")
+
+# Other
+fig = total_plot(ms[(ms["adoption_scenario"] == "Max adoption potential") & (ms["end_use2"].str.contains("Other"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_MAP_Other.html")
+fig.write_html(plot_path + "_MAP_Other.html")
+
+fig = total_plot(ms[(ms["adoption_scenario"] == "Technical potential") & (ms["end_use2"].str.contains("Other"))])
+fig.update_layout(height = 1600 * 1, width = 1600)
+print("Writing: " + plot_path + "_TP_Other.html")
+fig.write_html(plot_path + "_TP_Other.html")
+
+################################################################################
+# End of File                     End of File                      End of File #
+################################################################################
 
 
