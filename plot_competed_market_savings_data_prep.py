@@ -50,13 +50,13 @@ cms = [{
     'value'   : value
     }\
         for ecm in ecm_results_keys\
-        for ap in list(ecm_results[ecm][CMS].keys())\
-        for v in list(ecm_results[ecm][CMS][ap].keys())\
-        for rg in list(ecm_results[ecm][CMS][ap][v].keys())\
-        for bg in list(ecm_results[ecm][CMS][ap][v][rg].keys())\
-        for eu in list(ecm_results[ecm][CMS][ap][v][rg][bg].keys())\
-        for yr in list(ecm_results[ecm][CMS][ap][v][rg][bg][eu].keys())\
-        for value in [ecm_results[ecm][CMS][ap][v][rg][bg][eu][yr]]
+        for ap  in list(ecm_results[ecm][CMS].keys())\
+        for v   in list(ecm_results[ecm][CMS][ap].keys())\
+        for rg  in list(ecm_results[ecm][CMS][ap][v].keys())\
+        for bg  in list(ecm_results[ecm][CMS][ap][v][rg].keys())\
+        for eu  in list(ecm_results[ecm][CMS][ap][v][rg][bg].keys())\
+        for yr  in list(ecm_results[ecm][CMS][ap][v][rg][bg][eu].keys())\
+        for value in   [ecm_results[ecm][CMS][ap][v][rg][bg][eu][yr]]
         ]
 
 print("Build one competed_market_savings DataFrame...")

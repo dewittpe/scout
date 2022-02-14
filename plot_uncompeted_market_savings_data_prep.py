@@ -38,16 +38,16 @@ ums = [{
     'year' : yr,
     'value' : value
     }\
-            for i in range(len(ecm_prep)) \
+            for i   in range(len(ecm_prep)) \
             for ecm in [ecm_prep[i]["name"]] \
-            for ap in list(ecm_prep[i]["markets"].keys())\
+            for ap  in list(ecm_prep[i]["markets"].keys())\
             for ecc in list(ecm_prep[i]["markets"][ap]["mseg_out_break"].keys())\
-            for rs in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc].keys())\
-            for rg in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs].keys())\
-            for bc in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs][rg].keys())\
-            for eu in list(ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc].keys())\
-            for yr in list(ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc][eu].keys())\
-            for value in [ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc][eu][yr]]
+            for rs  in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc].keys())\
+            for rg  in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs].keys())\
+            for bc  in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs][rg].keys())\
+            for eu  in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs][rg][bc].keys())\
+            for yr  in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs][rg][bc][eu].keys())\
+            for value in   [ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs][rg][bc][eu][yr]]
             ]
 
 
