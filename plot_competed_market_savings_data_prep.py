@@ -39,38 +39,29 @@ lvl2_keys = list(ecm_results[ecm_results_keys[0]].keys())
 ##                         Competed Market Savings                          ###
 CMS = "Markets and Savings (by Category)"
 
-ecm_count = 1
+cms = [{'ecm' : ecm,
+    'adoption_scenario' : ap,
+    'variable' : v,
+    'region' : rg,
+    'building_class' : bg,
+    'end_use' : eu,
+    'year'    : yr,
+    'value'   : value
+    }\
+        for ecm in ecm_results_keys\
+        for ap in list(ecm_results[ecm][CMS].keys())\
+        for v in list(ecm_results[ecm][CMS][ap].keys())\
+        for rg in list(ecm_results[ecm][CMS][ap][v].keys())\
+        for bg in list(ecm_results[ecm][CMS][ap][v][rg].keys())\
+        for eu in list(ecm_results[ecm][CMS][ap][v][rg][bg].keys())\
+        for yr in list(ecm_results[ecm][CMS][ap][v][rg][bg][eu].keys())\
+        for value in [ecm_results[ecm][CMS][ap][v][rg][bg][eu][yr]]
+        ]
 
-cms = []
-for ecm in ecm_results_keys:
-    print("(" + str(ecm_count) + "/" + str(len(ecm_results_keys)) +\
-            ") Extracting Competed Markets Savings for: " + ecm)
-    ecm_count = ecm_count + 1
-    for ap in list(ecm_results[ecm][CMS].keys()):
-        for v in list(ecm_results[ecm][CMS][ap].keys()):
-            for rg in list(ecm_results[ecm][CMS][ap][v].keys()):
-                for bg in list(ecm_results[ecm][CMS][ap][v][rg].keys()):
-                    for eu in list(ecm_results[ecm][CMS][ap][v][rg][bg].keys()):
-                        x = pd.DataFrame.from_dict(
-                                ecm_results[ecm][CMS][ap][v][rg][bg][eu]
-                                , orient = 'index'
-                                , columns = ['value']
-                                )
-                        x['end_use'] = eu
-                        x['building_class'] = bg
-                        x['region'] = rg
-                        x['variable'] = v
-                        x['adoption_scenario'] = ap
-                        x['ecm'] = ecm
-                        cms.append(x)
+print("Build one DataFrame...")
+cms = pd.DataFrame.from_dict(cms)
 
-print("Concat to one DataFrame...")
-cms = pd.concat(cms)
-
-# reset the index and rename -- the index is the year.
-cms.reset_index(inplace = True)
-cms.rename(columns = {"index" : "year"}, inplace = True)
-
+# add some more columns
 cms["competed"] = "Competed"
 cms["results_scenario"] = "savings"
 
@@ -95,8 +86,6 @@ cms.loc[cms["end_use"].isin(["Computers and Electronics"]), "end_use2"] = "Elect
 
 # check
 # cms[["end_use", "end_use2"]].value_counts()
-
-
 
 print("Writing ./results/plots/competed_market_savings.parquet")
 cms.to_parquet("./results/plots/competed_market_savings.parquet")
