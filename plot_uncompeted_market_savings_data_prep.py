@@ -27,43 +27,32 @@ f.close()
 ################################################################################
 ###                        Uncompeted Market Savings                         ###
 
-ums = []
-for i in range(len(ecm_prep)):
-    ecm = ecm_prep[i]["name"]
-    print("(" + str(i + 1) + "/" + str(len(ecm_prep)) +\
-            ") Extracting Uncompeted Markets Savings for: " + ecm)
-    for ap in list(ecm_prep[i]["markets"].keys()):
-        for ecc in list(ecm_prep[i]["markets"][ap]["mseg_out_break"].keys()):
-            for rs in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc]\
-                    .keys()):
-                for rg in list(ecm_prep[i]["markets"][ap]["mseg_out_break"]\
-                        [ecc][rs].keys()):
-                    for bc in list(ecm_prep[i]["markets"][ap]["mseg_out_break"]\
-                            [ecc][rs][rg].keys()):
-                        for eu in list(ecm_prep[i]["markets"][ap]\
-                                ["mseg_out_break"][ecc][rs][rg][bc].keys()):
-                            d = ecm_prep[i]["markets"][ap]["mseg_out_break"]\
-                                    [ecc][rs][rg][bc][eu]
-                            if (len(d) > 0):
-                                x = pd.DataFrame.from_dict(
-                                        d
-                                        , orient = 'index'
-                                        , columns = ['value'])
-                                x['end_use'] = eu
-                                x['building_class'] = bc
-                                x['region'] = rg
-                                x['results_scenario'] = rs
-                                x['ecc'] = ecc
-                                x['adoption_scenario'] = ap
-                                x['ecm'] = ecm
-                                ums.append(x)
+ums = [{'ecm' : ecm,
+    'adoption_scenario' : ap,
+    'ecc' : ecc,
+    'results_scenario' : rs,
+    'region' : rg,
+    'building_class' : bc,
+    'end_use' : eu,
+    'year' : yr,
+    'value' : value
+    }\
+            for i in range(len(ecm_prep)) \
+            for ecm in [ecm_prep[i]["name"]] \
+            for ap in list(ecm_prep[i]["markets"].keys())\
+            for ecc in list(ecm_prep[i]["markets"][ap]["mseg_out_break"].keys())\
+            for rs in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc].keys())\
+            for rg in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs].keys())\
+            for bc in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs][rg].keys())\
+            for eu in list(ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc].keys())
+            for yr in list(ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc][eu].keys())
+            for value in [ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc][eu][yr]]
+            ]
 
-print("Concat to one DataFrame...")
-ums = pd.concat(ums)
 
-# reset the index and rename -- the index is the year.
-ums.reset_index(inplace = True)
-ums.rename(columns = {"index" : "year"}, inplace = True)
+print("build one uncompeted_market_savings DataFrame...")
+ums = pd.DataFrame.from_dict(ums)
+
 ums["competed"] = "Uncompeted"
 
 ums["construction"] = ""

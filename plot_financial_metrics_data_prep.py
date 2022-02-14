@@ -47,28 +47,21 @@ for k in fm_variable_keys:
     list(ecm_results[ecm_results_keys[0]]["Financial Metrics"][k].keys())
 
 # create the fm DataFrame
-ecm_count = 1
-fm = []
-for ecm in ecm_results_keys:
-    print("(" + str(ecm_count) + "/" + str(len(ecm_results_keys)) +\
-            ") Extracting Financial Metrics for: " + ecm)
-    ecm_count = ecm_count + 1
-    for v in fm_variable_keys:
-        x = pd.DataFrame.from_dict(
-                ecm_results[ecm]["Financial Metrics"][v]
-                , orient = 'index'
-                , columns = ['value']
-                )
-        x['variable'] = v
-        x['ecm'] = ecm
-        fm.append(x)
+fm = [{'ecm' : ecm,
+      'variable' : v,
+      'year' : yr,
+      'value' : value
+    }\
+            for ecm in ecm_results_keys\
+            for v in fm_variable_keys\
+            for yr in list(ecm_results[ecm]["Financial Metrics"][v].keys())\
+            for value in [ecm_results[ecm]["Financial Metrics"][v][yr]]
+            ]
 
-print("Concat to one DataFrame...")
-fm = pd.concat(fm)
 
-# reset the index and rename -- the index is the year.
-fm.reset_index(inplace = True)
-fm.rename(columns = {"index" : "year"}, inplace = True)
+
+print("Build one financial_metrics DataFrame...")
+fm = pd.DataFrame.from_dict(fm)
 
 print("Writing ./results/plots/financial_metrics.parquet")
 fm.to_parquet("./results/plots/financial_metrics.parquet")

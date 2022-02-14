@@ -58,7 +58,7 @@ cms = [{'ecm' : ecm,
         for value in [ecm_results[ecm][CMS][ap][v][rg][bg][eu][yr]]
         ]
 
-print("Build one DataFrame...")
+print("Build one competed_market_savings DataFrame...")
 cms = pd.DataFrame.from_dict(cms)
 
 # add some more columns
