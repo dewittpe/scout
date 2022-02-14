@@ -27,7 +27,8 @@ f.close()
 ################################################################################
 ###                        Uncompeted Market Savings                         ###
 
-ums = [{'ecm' : ecm,
+ums = [{
+    'ecm' : ecm,
     'adoption_scenario' : ap,
     'ecc' : ecc,
     'results_scenario' : rs,
@@ -44,8 +45,8 @@ ums = [{'ecm' : ecm,
             for rs in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc].keys())\
             for rg in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs].keys())\
             for bc in list(ecm_prep[i]["markets"][ap]["mseg_out_break"][ecc][rs][rg].keys())\
-            for eu in list(ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc].keys())
-            for yr in list(ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc][eu].keys())
+            for eu in list(ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc].keys())\
+            for yr in list(ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc][eu].keys())\
             for value in [ecm_prep[i]["markets"][ap] ["mseg_out_break"][ecc][rs][rg][bc][eu][yr]]
             ]
 

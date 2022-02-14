@@ -39,7 +39,8 @@ lvl2_keys = list(ecm_results[ecm_results_keys[0]].keys())
 ##                         Competed Market Savings                          ###
 CMS = "Markets and Savings (by Category)"
 
-cms = [{'ecm' : ecm,
+cms = [{
+    'ecm' : ecm,
     'adoption_scenario' : ap,
     'variable' : v,
     'region' : rg,
