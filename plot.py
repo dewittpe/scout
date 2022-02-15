@@ -5,7 +5,7 @@ import os
 
 ################################################################################
 def mtime(p):
-    if os.path.exists(p):
+    if os.path.isfile(p):
         return os.path.getmtime(p)
     else:
         return 0
@@ -13,7 +13,7 @@ def mtime(p):
 ################################################################################
 # Check if ecm_prep.py and/or run.py need to be evaluated.
 
-if not os.path.exists("./supporting_data/ecm_prep.json"):
+if not os.path.isfile("./supporting_data/ecm_prep.json"):
     print("./supporting_data/ecm_prep.json does not exist")
     exit(1)
 
@@ -23,7 +23,7 @@ if ecm_prep_json_mtime < os.path.getmtime("./ecm_prep.py"):
     print("rerun ecm_prep.py")
     exit(1)
 
-if not os.path.exists("./results/ecm_results.json"):
+if not os.path.isfile("./results/ecm_results.json"):
     print("./supporting_data/ecm_results.json does not exist. evaluate run.py")
     exit(1)
 
@@ -44,6 +44,19 @@ fm_parquet_mt  = mtime('./results/plots/financial_metrics.parquet')
 cms_parquet_mt = mtime('./results/plots/competed_market_savings.parquet')
 ums_parquet_mt = mtime('./results/plots/uncompeted_market_savings.parquet')
 
+# create output directories, if needed
+os.makedirs('./results/plots/financial_metrics/each_ecm', exist_ok = True)
+os.makedirs('./results/plots/cost_effective_carbon_savings', exist_ok = True)
+os.makedirs('./results/plots/cost_effective_cost_savings', exist_ok = True)
+os.makedirs('./results/plots/cost_effective_energy_savings', exist_ok = True)
+os.makedirs('./results/plots/total_carbon_savings', exist_ok = True)
+os.makedirs('./results/plots/total_cost_savings', exist_ok = True)
+os.makedirs('./results/plots/total_energy_savings', exist_ok = True)
+os.makedirs('./results/plots/total_carbon', exist_ok = True)
+os.makedirs('./results/plots/total_cost', exist_ok = True)
+os.makedirs('./results/plots/total_energy', exist_ok = True)
+
+# empty command list
 cmd_list = []
 if ((fm_parquet_mt < fmdpmt) | (fm_parquet_mt < ecm_results_json_mtime)):
     print("financial_metrics.parquet will be updated")
