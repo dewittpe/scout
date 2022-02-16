@@ -25,7 +25,38 @@ ecm_prep = json.load(f)
 f.close()
 
 ################################################################################
+###                               Data Explore                               ###
+ecm_prep[0]['fuel_type']
+ecm_prep[1]['fuel_type']
+ecm_prep[0].keys()
+
+list(ecm_prep[1]["markets"]["Technical potential"].keys())
+list(ecm_prep[1]["markets"]["Technical potential"]["master_mseg"].keys())
+list(ecm_prep[1]["markets"]["Technical potential"]["mseg_out_break"].keys())
+list(ecm_prep[1]["markets"]["Technical potential"]["mseg_out_break"]["energy"].keys())
+list(ecm_prep[1]["markets"]["Technical potential"]["mseg_out_break"]["energy"]["baseline"].keys())
+list(ecm_prep[1]["markets"]["Technical potential"]["mseg_out_break"]["energy"]["baseline"]["AIA CZ1"].keys())
+list(ecm_prep[1]["markets"]["Technical potential"]["mseg_out_break"]["energy"]["baseline"]["AIA CZ1"]["Residential (New)"].keys())
+list(ecm_prep[1]["markets"]["Technical potential"]["mseg_out_break"]["energy"]["baseline"]["AIA CZ1"]["Residential (New)"].keys())
+
+################################################################################
+###                                Fuel Types                                ###
+uft = [{
+    'ecm' : ecm,
+    'fuel_type_level' : ftlvl,
+    'fuel_type' : ft
+    }\
+            for i      in range(len(ecm_prep))
+            for ecm    in [ecm_prep[i]["name"]]
+            for ftlvl  in list(ecm_prep[i]["fuel_type"].keys())
+            for ft     in [ecm_prep[i]["fuel_type"][ftlvl]]
+            ]
+uft = pd.DataFrame.from_dict(uft)
+uft
+
+################################################################################
 ###                        Uncompeted Market Savings                         ###
+print("build one uncompeted_market_savings DataFrame...")
 
 ums = [{
     'ecm' : ecm,
@@ -51,8 +82,9 @@ ums = [{
             ]
 
 
-print("build one uncompeted_market_savings DataFrame...")
 ums = pd.DataFrame.from_dict(ums)
+
+ums[["ecm", "fuel_type"]]
 
 ums["competed"] = "Uncompeted"
 
