@@ -38,6 +38,8 @@ ms = cms.append(ums, sort = True)
 ms = ms[ms["results_scenario"].isin(["baseline", "efficient"])]
 ms = ms[ms["ecc"].isin([arg])]
 
+ms[["fuel_type"]].value_counts()
+
 ms = ms.groupby(["adoption_scenario", "ecm", "competed", "results_scenario", "year"])\
         .agg({
             "value": "sum",
@@ -49,6 +51,8 @@ ms = ms.groupby(["adoption_scenario", "ecm", "competed", "results_scenario", "ye
 ms.reset_index(inplace = True)
 
 ms[["end_use", "end_use2"]].value_counts()
+
+
 
 # create a plot for each ecm with a facet for adoption_scenario
 for ecm in set(ms["ecm"]):

@@ -70,6 +70,8 @@ regex = re.compile(r"\d{4}")
 
 has_fuel_type = [regex.search(list(cms[i]["value"].keys())[0]) is None for i in range(len(cms))]
 
+# THE FOLLOWING IS FLAWED THE FOR LOOP ISN"T GOING TO GIVE YOU WANT YOU WANT
+exit(1)
 def foo(i):
     if has_fuel_type[i]:
         hft = [{
