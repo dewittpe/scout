@@ -14,6 +14,7 @@
 import os
 import json
 import pandas as pd
+import re
 
 # verify the output directory exists, create it if not.
 if not os.path.isdir("./results/plots"):
@@ -37,6 +38,7 @@ lvl2_keys = list(ecm_results[ecm_results_keys[0]].keys())
 
 ################################################################################
 ##                         Competed Market Savings                          ###
+print("Build one competed_market_savings DataFrame...")
 CMS = "Markets and Savings (by Category)"
 
 cms = [{
@@ -46,21 +48,65 @@ cms = [{
     'region' : rg,
     'building_class' : bg,
     'end_use' : eu,
-    'year'    : yr,
-    'value'   : value
+    'value' : value
     }\
-        for ecm in ecm_results_keys\
-        for ap  in list(ecm_results[ecm][CMS].keys())\
-        for v   in list(ecm_results[ecm][CMS][ap].keys())\
-        for rg  in list(ecm_results[ecm][CMS][ap][v].keys())\
-        for bg  in list(ecm_results[ecm][CMS][ap][v][rg].keys())\
-        for eu  in list(ecm_results[ecm][CMS][ap][v][rg][bg].keys())\
-        for yr  in list(ecm_results[ecm][CMS][ap][v][rg][bg][eu].keys())\
-        for value in   [ecm_results[ecm][CMS][ap][v][rg][bg][eu][yr]]
+        for ecm in ecm_results_keys
+        for ap  in list(ecm_results[ecm][CMS].keys())
+        for v   in list(ecm_results[ecm][CMS][ap].keys())
+        for rg  in list(ecm_results[ecm][CMS][ap][v].keys())
+        for bg  in list(ecm_results[ecm][CMS][ap][v][rg].keys())
+        for eu  in list(ecm_results[ecm][CMS][ap][v][rg][bg].keys())
+        for value in   [ecm_results[ecm][CMS][ap][v][rg][bg][eu]]
         ]
 
-print("Build one competed_market_savings DataFrame...")
+# the value element forks depending on the presence/absence of split fuel.  So,
+# split the dictionary and build two lists
+#
+# TODO: Modify the code in run.py so that fuel_type is a element of all output.
+# then the list construciton above could be used for all cases and this forking
+# logic would no longer be needed.
+
+regex = re.compile(r"\d{4}")
+
+has_fuel_type = [regex.search(list(cms[i]["value"].keys())[0]) is None for i in range(len(cms))]
+
+def foo(i):
+    if has_fuel_type[i]:
+        hft = [{
+            "fuel_type" : ft,
+            "year" : yr,
+            "value" : value
+            }\
+                    for ft in list(cms[i]["value"].keys())
+                    for yr in list(cms[i]["value"][ft].keys())
+                    for value in [cms[i]["value"][ft][yr]]
+                    ]
+    else:
+        hft = [{
+            "fuel_type" : "",
+            "year" : yr,
+            "value" : value
+            }\
+                    for yr in list(cms[i]["value"].keys())
+                    for value in [cms[i]["value"][yr]]
+                    ]
+    for j in range(len(hft)) :
+        cms2 = {
+                'ecm' : cms[i]["ecm"],
+                'adoption_scenario' : cms[i]["adoption_scenario"],
+                'variable' : cms[i]["variable"],
+                'region' : cms[i]["region"],
+                'building_class' : cms[i]["building_class"],
+                'end_use' : cms[i]["end_use"],
+                'fuel_type' : hft[j]["fuel_type"],
+                'year' : hft[j]["year"],
+                'value' : hft[j]["value"]
+                }
+    return cms2
+
+cms = [foo(i) for i in range(len(cms))]
 cms = pd.DataFrame.from_dict(cms)
+cms
 
 # add some more columns
 cms["competed"] = "Competed"
