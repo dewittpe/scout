@@ -495,6 +495,12 @@ climate_zone
 Either a single climate zone or list of climate zones to which the ECM applies. The climate zone strings must come from the list of :ref:`valid entries <ecm-baseline_climate-zone>` in the :ref:`ecm-def-reference`. ::
 
    {...
+    "climate_zone": "all",
+    ...}
+
+::
+
+   {...
     "climate_zone": ["AIA_CZ2", "AIA_CZ3", ...],
     ...}
 
