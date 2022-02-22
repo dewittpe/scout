@@ -42,6 +42,9 @@ list(ecm_prep[0]["markets"]["Technical potential"]["mseg_out_break"]["energy"]["
 list(ecm_prep[0]["markets"]["Technical potential"]["mseg_out_break"]["energy"]["baseline"]["AIA CZ1"]["Commercial (New)"]["Heating (Equip.)"]["Electric"].keys())
 ecm_prep[0]["markets"]["Technical potential"]["mseg_out_break"]["energy"]["baseline"]["AIA CZ1"]["Commercial (New)"]["Heating (Equip.)"]["Electric"]["2045"]
 
+################################################################################
+ecm_prep[0].keys()
+[ecm_prep[i]["climate_zone"] for i in range(len(ecm_prep))]
 
 ################################################################################
 ###                                Fuel Types                                ###
