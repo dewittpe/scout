@@ -144,14 +144,12 @@ fm_test[, fm_equal_xlsx := (fm_value > xlsx_value - (.Machine$double.eps)^(0.5))
                            (fm_value < xlsx_value + (.Machine$double.eps)^(0.5))]
 
 # are there values that differ between the two data sets? -- YES
-stopifnot(nrow(fm_test[!(fm_equal_xlsx)]) == 11832L)
+stopifnot(nrow(fm_test[!(fm_equal_xlsx)]) > 0L)
 
 # the differences are machine percision differences:
 fm_test2 <-
   fm_test[!(fm_equal_xlsx), .(ecm, fm_value, xlsx_value, delta = abs(fm_value - xlsx_value))]
 
-stopifnot(isTRUE(all.equal(min(fm_test2$fm_value), 11057672)))
-stopifnot(isTRUE(all.equal(min(fm_test2$xlsx_value), 11057672)))
 stopifnot(max(fm_test2$delta) < 1e-05)
 
 ################################################################################
@@ -227,7 +225,7 @@ nrow(test_cost[percent_delta > 0.01])
 test_cost[building_classes_ms != building_classes_xlsx]
 test_cost[end_uses_ms != end_uses_xlsx]
 
-# one possible issue -- the building classes 
+# one possible issue -- the building classes
 # xlsx have only two options whereas ms has six
 stopifnot(length(unique(xlsx_cost$building_classes)) == 2L)
 stopifnot(length(unique(ms_cost$building_classes)) == 6L)
@@ -236,7 +234,7 @@ ms_cost[, unique(building_classes)]
 
 # if we ignore the building classes a visual spot check suggests there are still
 # differences between the sets with respect to the cost saving values.
-          
+
 ################################################################################
 #                                    Carbon                                    #
 xlsx_carbon <-
@@ -292,7 +290,7 @@ test_carbon[percent_delta > 1e-8]
 # Why are there rows in test_carbon that do not have both _ms and _xlsx values?
 test_carbon[is.na(value_ms) | is.na(value_xlsx)]
 
-# one possible issue -- the building classes 
+# one possible issue -- the building classes
 # xlsx have only two options whereas ms has six
 stopifnot(length(unique(xlsx_carbon$building_classes)) == 2L)
 stopifnot(length(unique(ms_carbon$building_classes)) == 6L)
