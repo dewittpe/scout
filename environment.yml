@@ -13,4 +13,5 @@ dependencies:
     - dash_bootstrap_components
     - tabulate
     - numpy_financial
+    - openpyxl
     - pyam-iamc
