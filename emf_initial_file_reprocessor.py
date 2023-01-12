@@ -18,18 +18,17 @@ def cleanup(df):
 
     # Remove all total CO2 emissions and rename "direct" CO2 emissions
     totco2_regex = '^Emissions\|.*\|(?:Direct|Indirect)$|^(?!Emissions).*'
-    df = df[df['Variable'].str.contains(totco2_regex)]
+    df = df[df['Variable'].str.contains(totco2_regex)].reset_index(drop = True)
     df['Variable'] = df.apply(lambda x: re.sub('\|Direct', '', x['Variable']), axis=1)
-    # df = df[~df['Variable'].str.endswith('|Direct')]
 
     # Remove gas cooling
     gas_cool_regex = '^Final Energy\|Buildings\|.*\|Cooling\|Gas'
-    df = df[~df['Variable'].str.contains(gas_cool_regex)]
+    df = df[~df['Variable'].str.contains(gas_cool_regex)].reset_index(drop = True)
 
     # Remove Final Energy|Buildings|<bldg class>\<end use> where
     # end use == Appliances, Cooling, Heating
     eu_regex = '^Final Energy\|Buildings\|.*\|(?:Appliances|Cooling|Heating)$'
-    df = df[~df['Variable'].str.contains(eu_regex)]
+    df = df[~df['Variable'].str.contains(eu_regex)].reset_index(drop = True)
 
     # Change Final Energy|Buildings|<bldg class>\Lighting to add \Electricity after
     # Change Final Energy|Buildings|<bldg class>|Other to add |Electricity after
