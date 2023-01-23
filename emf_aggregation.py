@@ -356,19 +356,19 @@ if __name__ == "__main__":
     baseline.reset_index(inplace = True, drop = True)
 
     # remove useless rows
-    baseline = baseline[~((baseline.lvl7 == "NA") & (baseline.lvl8.isna())]
+    baseline = baseline[~((baseline.lvl7 == "NA") & (baseline.lvl8.isna()))]
     baseline = baseline[~((baseline.lvl6 == "NA") & 
                           (baseline.lvl7.isna()) &
-                          (baseline.lvl8.isna())]
+                          (baseline.lvl8.isna()))]
     baseline = baseline[~((baseline.lvl5 == "NA") & 
                           (baseline.lvl6.isna()) &
                           (baseline.lvl7.isna()) &
-                          (baseline.lvl8.isna())]
+                          (baseline.lvl8.isna()))]
     baseline = baseline[~((baseline.lvl4 == "NA") & 
                           (baseline.lvl5.isna()) &
                           (baseline.lvl6.isna()) &
                           (baseline.lvl7.isna()) &
-                          (baseline.lvl8.isna())]
+                          (baseline.lvl8.isna()))]
 
     # if stock/energy is in lvl4 then
     baseline.loc[baseline.lvl4.isin(["stock", "energy"]),:]
