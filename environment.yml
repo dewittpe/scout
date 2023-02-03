@@ -7,6 +7,7 @@ dependencies:
   - plotly
   - dash
   - pip
+  - tqdm
   - pip:
     - coverage
     - tox
